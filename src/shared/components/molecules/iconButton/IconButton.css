@@ -1,0 +1,45 @@
+.icon-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-foreground);
+  border-radius: var(--radius-full);
+  transition: background-color var(--transition-normal);
+}
+.icon-button--default:hover {
+  background-color: var(--color-muted);
+}
+.icon-button--ghost:hover {
+  background-color: hsla(0, 0%, 0%, 0.05);
+}
+/* Sizes */
+.icon-button--small {
+  padding: 0.5rem;
+}
+.icon-button--medium {
+  padding: 0.75rem;
+}
+.icon-button--large {
+  padding: 1rem;
+}
+/* Badge */
+.icon-button__badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background-color: var(--color-accent);
+  color: var(--color-accent-foreground);
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
