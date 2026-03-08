@@ -1,28 +1,7 @@
-.detail-panel {
-  position: relative;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)),
-    linear-gradient(160deg, #181818, #101010);
-  border-radius: 18px;
-  border: 1px solid var(--nike-border);
-  padding: 1.3rem;
-  margin-bottom: 1rem;
-  box-shadow: var(--nike-shadow);
-  overflow: hidden;
-  transition: all 0.2s ease;
-}
-
-.detail-panel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at top right, rgba(255, 106, 0, 0.08), transparent 30%);
-  pointer-events: none;
-}
+@import './AdminShared.css';
 
 .detail-panel:hover {
   transform: translateY(-2px);
-  border-color: rgba(255, 106, 0, 0.2);
 }
 
 .detail-panel__head {

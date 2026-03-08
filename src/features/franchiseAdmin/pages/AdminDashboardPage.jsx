@@ -33,7 +33,7 @@ const AdminDashboardPage = () => {
       </div>
 
       <div className="admin-section-grid">
-        <article className="panel">
+        <article className="panel admin-surface">
           <h2>Doanh thu theo store / khu vực</h2>
           <div className="revenue-bars">
             {storeRevenue.map((item) => (
@@ -50,7 +50,7 @@ const AdminDashboardPage = () => {
           </div>
         </article>
 
-        <article className="panel">
+        <article className="panel admin-surface">
           <h2>Top store bán chạy nhất</h2>
           <ol className="top-store-list">
             {topStores.map((store) => (

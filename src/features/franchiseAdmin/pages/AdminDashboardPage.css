@@ -1,29 +1,4 @@
-.admin-page {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 2.5rem 1.75rem 3rem;
-  color: var(--nike-white);
-}
-
-.admin-page__header {
-  margin-bottom: 1.25rem;
-}
-
-.admin-page__header h1 {
-  margin: 0;
-  font-size: clamp(2.1rem, 3vw, 3rem);
-  line-height: 1;
-  text-transform: uppercase;
-  letter-spacing: -0.03em;
-  font-weight: 800;
-}
-
-.admin-page__header p {
-  margin-top: 0.7rem;
-  color: var(--nike-text-muted);
-  font-size: 1rem;
-  max-width: 680px;
-}
+@import './AdminShared.css';
 
 .stats-grid {
   display: grid;
@@ -36,33 +11,6 @@
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 1rem;
-}
-
-.panel {
-  position: relative;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)),
-    linear-gradient(160deg, #181818, #101010);
-  border: 1px solid var(--nike-border);
-  border-radius: 18px;
-  padding: 1.3rem;
-  box-shadow: var(--nike-shadow);
-  overflow: hidden;
-  transition: all 0.2s ease;
-}
-
-.panel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at top right, rgba(255, 106, 0, 0.1), transparent 32%);
-  pointer-events: none;
-}
-
-.panel:hover {
-  transform: translateY(-3px);
-  border-color: rgba(255, 106, 0, 0.25);
-  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.36);
 }
 
 .panel h2 {
@@ -90,50 +38,6 @@
   justify-content: space-between;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 0;
-}
-
-.revenue-bars__label-row span {
-  color: var(--nike-white);
-}
-
-.revenue-bars__label-row strong {
-  color: #ff9d52;
-  font-weight: 700;
-}
-
-.revenue-bars__track {
-  height: 12px;
-  background: rgba(255, 255, 255, 0.07);
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.revenue-bars__fill {
-  height: 100%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--nike-orange), var(--nike-orange-deep));
-  box-shadow: 0 0 16px rgba(255, 106, 0, 0.25);
-}
-
-.top-store-list {
-  margin: 0;
-  padding-left: 0;
-  list-style: none;
-}
-
-.top-store-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.7rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.top-store-list li:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
 }
 
 .top-store-list span {
@@ -158,10 +62,6 @@
 }
 
 @media (max-width: 640px) {
-  .admin-page {
-    padding: 1.5rem 1rem 2rem;
-  }
-
   .stats-grid {
     grid-template-columns: 1fr;
   }

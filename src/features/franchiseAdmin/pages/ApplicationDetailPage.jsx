@@ -43,7 +43,7 @@ const ApplicationDetailPage = () => {
 
       <AdminMenu />
 
-      <article className="detail-panel">
+      <article className="detail-panel admin-surface">
         <div className="detail-panel__head">
           <div>
             <p className="detail-code">Mã hồ sơ: {application.code}</p>
@@ -77,7 +77,7 @@ const ApplicationDetailPage = () => {
         </div>
       </article>
 
-      <article className="detail-panel">
+      <article className="detail-panel admin-surface">
         <h3>Lịch sử trạng thái hồ sơ (Audit trail)</h3>
         <ul className="history-list">
           {application.history.map((entry) => (

@@ -1,0 +1,58 @@
+.admin-page {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 2.5rem 1.75rem 3rem;
+  color: var(--nike-white);
+}
+
+.admin-page__header {
+  margin-bottom: 1.25rem;
+}
+
+.admin-page__header h1 {
+  margin: 0;
+  font-size: clamp(2.1rem, 3vw, 3rem);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+}
+
+.admin-page__header p {
+  margin-top: 0.7rem;
+  color: var(--nike-text-muted);
+  font-size: 1rem;
+  max-width: 680px;
+}
+
+.admin-surface {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)),
+    linear-gradient(160deg, #181818, #101010);
+  border: 1px solid var(--nike-border);
+  border-radius: 18px;
+  padding: 1.3rem;
+  box-shadow: var(--nike-shadow);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.admin-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(255, 106, 0, 0.1), transparent 32%);
+  pointer-events: none;
+}
+
+.admin-surface:hover {
+  border-color: rgba(255, 106, 0, 0.25);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.36);
+}
+
+@media (max-width: 640px) {
+  .admin-page {
+    padding: 1.5rem 1rem 2rem;
+  }
+}
