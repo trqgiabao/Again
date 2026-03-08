@@ -67,6 +67,7 @@ const ApplicationListPage = () => {
     <section className="admin-page">
       <header className="admin-page__header">
         <h1>Danh sách hồ sơ đăng ký Franchisee</h1>
+        <p>Quản lý hồ sơ theo trạng thái, khu vực và thời gian nộp.</p>
       </header>
 
       <AdminMenu />
@@ -121,7 +122,11 @@ const ApplicationListPage = () => {
           </thead>
           <tbody>
             {data.map((item) => (
-              <tr key={item.id} onClick={() => navigate(`/admin/applications/${item.id}`)}>
+              <tr
+                key={item.id}
+                className="application-table__row"
+                onClick={() => navigate(`/admin/applications/${item.id}`)}
+              >
                 <td>{item.fullName}</td>
                 <td>{item.email}</td>
                 <td>{item.region}</td>

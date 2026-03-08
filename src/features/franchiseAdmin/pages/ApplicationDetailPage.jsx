@@ -38,6 +38,7 @@ const ApplicationDetailPage = () => {
     <section className="admin-page">
       <header className="admin-page__header">
         <h1>Chi tiết hồ sơ Franchisee</h1>
+        <p>Theo dõi thông tin ứng viên, trạng thái xét duyệt và lịch sử xử lý hồ sơ.</p>
       </header>
 
       <AdminMenu />
@@ -64,9 +65,15 @@ const ApplicationDetailPage = () => {
         <p><strong>Kinh nghiệm kinh doanh:</strong> {application.businessExperience}</p>
 
         <div className="detail-actions">
-          <button className="btn btn--ghost" onClick={() => navigate('/admin/applications')}>Quay lại</button>
-          <button className="btn btn--danger" onClick={() => setOpenReject(true)}>Reject</button>
-          <button className="btn btn--primary" onClick={() => setOpenApprove(true)}>Approve</button>
+          <button className="btn btn--ghost" onClick={() => navigate('/admin/applications')}>
+            Quay lại
+          </button>
+          <button className="btn btn--danger" onClick={() => setOpenReject(true)}>
+            Reject
+          </button>
+          <button className="btn btn--primary" onClick={() => setOpenApprove(true)}>
+            Approve
+          </button>
         </div>
       </article>
 
@@ -89,12 +96,16 @@ const ApplicationDetailPage = () => {
         onClose={() => setOpenApprove(false)}
         actions={(
           <>
-            <button className="btn btn--ghost" onClick={() => setOpenApprove(false)}>Hủy</button>
-            <button className="btn btn--primary" onClick={() => setOpenApprove(false)}>Xác nhận Approve</button>
+            <button className="btn btn--ghost" onClick={() => setOpenApprove(false)}>
+              Hủy
+            </button>
+            <button className="btn btn--primary" onClick={() => setOpenApprove(false)}>
+              Xác nhận Approve
+            </button>
           </>
         )}
       >
-        Hồ sơ sẽ được chuyển bước tạo hợp đồng (Trang 7).
+        Hồ sơ sẽ được chuyển bước tạo hợp đồng.
       </Modal>
 
       <Modal
@@ -103,8 +114,14 @@ const ApplicationDetailPage = () => {
         onClose={() => setOpenReject(false)}
         actions={(
           <>
-            <button className="btn btn--ghost" onClick={() => setOpenReject(false)}>Hủy</button>
-            <button className="btn btn--danger" onClick={() => setOpenReject(false)} disabled={!rejectReason.trim()}>
+            <button className="btn btn--ghost" onClick={() => setOpenReject(false)}>
+              Hủy
+            </button>
+            <button
+              className="btn btn--danger"
+              onClick={() => setOpenReject(false)}
+              disabled={!rejectReason.trim()}
+            >
               Xác nhận Reject
             </button>
           </>

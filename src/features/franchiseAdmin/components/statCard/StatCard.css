@@ -1,29 +1,43 @@
 .stat-card {
-  padding: 1rem;
-  border-radius: 12px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.04);
+  padding: 1.2rem;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)),
+    linear-gradient(155deg, #1a1a1a, #111111);
+  border: 1px solid var(--nike-border);
+  box-shadow: var(--nike-shadow);
+  transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 106, 0, 0.18);
 }
 
 .stat-card--danger {
-  border-color: #fecaca;
-  background: #fef2f2;
+  border-color: #5f2900;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)),
+    linear-gradient(160deg, #2e1a0f, #20150f);
 }
 
 .stat-card__title {
   margin: 0;
-  color: #6b7280;
-  font-size: 0.85rem;
+  color: var(--nike-text-muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
 }
 
 .stat-card__value {
-  margin: 0.4rem 0;
-  color: #111827;
+  margin: 0.5rem 0;
+  color: var(--nike-white);
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
 }
 
 .stat-card__subtext {
   margin: 0;
-  font-size: 0.8rem;
-  color: #4b5563;
+  font-size: 0.82rem;
+  color: #ffb17a;
 }
