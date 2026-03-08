@@ -6,16 +6,16 @@
 }
 
 .status-badge--pending {
-  background: #fff7ed;
-  color: #c2410c;
+  background: #3a210f;
+  color: #ffbb84;
 }
 
 .status-badge--approved {
-  background: #ecfdf5;
-  color: #047857;
+  background: #19261b;
+  color: #8ae18a;
 }
 
 .status-badge--rejected {
-  background: #fef2f2;
-  color: #b91c1c;
+  background: #3a1616;
+  color: #ff9a9a;
 }

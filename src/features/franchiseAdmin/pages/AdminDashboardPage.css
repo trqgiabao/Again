@@ -1,17 +1,24 @@
 .admin-page {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 1.5rem;
-  color: #111827;
+  padding: 2rem 1.5rem 2.5rem;
+  color: var(--nike-white);
+}
+
+.admin-page__header {
+  margin-bottom: 1rem;
 }
 
 .admin-page__header h1 {
   margin: 0;
+  font-size: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .admin-page__header p {
-  margin-top: 0.4rem;
-  color: #6b7280;
+  margin-top: 0.45rem;
+  color: var(--nike-text-muted);
 }
 
 .stats-grid {
@@ -28,10 +35,11 @@
 }
 
 .panel {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  background: linear-gradient(160deg, #1f1f1f, #161616);
+  border: 1px solid var(--nike-border);
+  border-radius: 14px;
   padding: 1rem;
+  box-shadow: var(--nike-shadow);
 }
 
 .panel h2 {
@@ -52,16 +60,20 @@
   margin-bottom: 0.35rem;
 }
 
+.revenue-bars__label-row strong {
+  color: #ff8b33;
+}
+
 .revenue-bars__track {
   height: 10px;
-  background: #e5e7eb;
+  background: #2b2b2b;
   border-radius: 999px;
   overflow: hidden;
 }
 
 .revenue-bars__fill {
   height: 100%;
-  background: linear-gradient(90deg, #2563eb, #1d4ed8);
+  background: linear-gradient(90deg, var(--nike-orange), var(--nike-orange-deep));
 }
 
 .top-store-list {
@@ -73,6 +85,10 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.75rem;
+}
+
+.top-store-list strong {
+  color: #ff8b33;
 }
 
 @media (max-width: 900px) {

@@ -2,10 +2,30 @@
   box-sizing: border-box;
 }
 
+:root {
+  --nike-white: #f8f8f8;
+  --nike-black: #111111;
+  --nike-black-soft: #1c1c1c;
+  --nike-orange: #ff6a00;
+  --nike-orange-deep: #c14c00;
+  --nike-border: #2a2a2a;
+  --nike-surface: #181818;
+  --nike-surface-alt: #202020;
+  --nike-text-muted: #b8b8b8;
+  --nike-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+}
+
 body {
   margin: 0;
-   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  background: #f3f4f6;
-}a {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: radial-gradient(circle at top right, #2b1608 0%, #101010 38%, #060606 100%);
+  color: var(--nike-white);
+}
+
+a {
   color: inherit;
+}
+
+#root {
+  width: 100%;
 }

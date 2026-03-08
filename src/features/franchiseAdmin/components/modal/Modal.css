@@ -1,7 +1,7 @@
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(17, 24, 39, 0.45);
+  background: rgba(0, 0, 0, 0.58);
   display: grid;
   place-items: center;
   z-index: 20;
@@ -9,7 +9,9 @@
 
 .modal-content {
   width: min(500px, 90vw);
-  background: white;
+  background: linear-gradient(160deg, #232323, #171717);
+  border: 1px solid #323232;
+  color: var(--nike-white);
   border-radius: 12px;
   padding: 1.2rem;
 }
