@@ -1,0 +1,29 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.45);
+  display: grid;
+  place-items: center;
+  z-index: 20;
+}
+
+.modal-content {
+  width: min(500px, 90vw);
+  background: white;
+  border-radius: 12px;
+  padding: 1.2rem;
+}
+
+.modal-content h3 {
+  margin: 0 0 0.8rem;
+}
+
+.modal-body {
+  margin-bottom: 1rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}

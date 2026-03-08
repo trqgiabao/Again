@@ -1,0 +1,93 @@
+.detail-panel {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.detail-panel__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.detail-panel__head h2 {
+  margin: 0.25rem 0 0;
+}
+
+.detail-code {
+  margin: 0;
+  color: #6b7280;
+}
+
+.detail-grid {
+  margin: 1rem 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.detail-grid p,
+.detail-panel > p {
+  margin: 0;
+}
+
+.detail-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.btn {
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+}
+
+.btn--primary {
+  background: #2563eb;
+  color: white;
+}
+
+.btn--danger {
+  background: #b91c1c;
+  color: white;
+}
+
+.btn--ghost {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.history-list {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.history-list li {
+  margin-bottom: 0.8rem;
+}
+
+.history-list p {
+  margin: 0.2rem 0 0;
+  color: #4b5563;
+}
+
+textarea {
+  width: 100%;
+  margin-top: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.5rem;
+  resize: vertical;
+  min-height: 90px;
+}
+
+@media (max-width: 900px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}

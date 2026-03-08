@@ -1,0 +1,86 @@
+.admin-page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  color: #111827;
+}
+
+.admin-page__header h1 {
+  margin: 0;
+}
+
+.admin-page__header p {
+  margin-top: 0.4rem;
+  color: #6b7280;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.admin-section-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+}
+
+.panel {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.panel h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.revenue-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.revenue-bars__label-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+}
+
+.revenue-bars__track {
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.revenue-bars__fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2563eb, #1d4ed8);
+}
+
+.top-store-list {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.top-store-list li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .admin-section-grid {
+    grid-template-columns: 1fr;
+  }
+}

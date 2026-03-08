@@ -1,0 +1,21 @@
+.admin-menu {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.admin-menu__item {
+  color: #4b5563;
+  background: #f3f4f6;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.admin-menu__item--active {
+  color: white;
+  background: #111827;
+}
