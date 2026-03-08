@@ -47,21 +47,24 @@ const ApplicationListPage = () => {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
 
+    const normalizedSearch = search.trim().toLowerCase();
+
   const data = useMemo(() => {
     return mockApplications.filter((item) => {
+            const fullName = item.fullName.toLowerCase();
+      const email = item.email.toLowerCase();
       const matchStatus = status === 'All' || item.status === status;
       const matchRegion = region === 'All' || item.region === region;
-      const keyword = search.trim().toLowerCase();
       const matchSearch =
-        !keyword ||
-        item.fullName.toLowerCase().includes(keyword) ||
-        item.email.toLowerCase().includes(keyword);
+        !normalizedSearch ||
+        fullName.includes(normalizedSearch) ||
+        email.includes(normalizedSearch);
       const matchFrom = !fromDate || item.submittedAt >= fromDate;
       const matchTo = !toDate || item.submittedAt <= toDate;
 
       return matchStatus && matchRegion && matchSearch && matchFrom && matchTo;
     });
-  }, [status, region, search, fromDate, toDate]);
+   }, [status, region, normalizedSearch, fromDate, toDate]);
 
   return (
     <section className="admin-page">
