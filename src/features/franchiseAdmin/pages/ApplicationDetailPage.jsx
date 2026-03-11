@@ -1,12 +1,18 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminMenu from "../components/adminMenu/AdminMenu";
 import StatusBadge from "../components/statusBadge/StatusBadge";
 import Modal from "../components/modal/Modal";
+import {
+  approveAdminApplication,
+  getAdminApplicationDetail,
+  rejectAdminApplication,
+} from "../api/franchiseAdminApi";
 import "./ApplicationDetailPage.css";
 
 const mockData = {
   "app-001": {
+    id: "app-001",
     code: "FA-2026-001",
     fullName: "Nguyễn Văn A",
     email: "a.nguyen@mail.com",
@@ -31,7 +37,9 @@ const mockData = {
       },
     ],
   },
+
   "app-002": {
+    id: "app-002",
     code: "FA-2026-002",
     fullName: "Trần Thị B",
     email: "b.tran@mail.com",
@@ -56,7 +64,9 @@ const mockData = {
       },
     ],
   },
+
   "app-003": {
+    id: "app-003",
     code: "FA-2026-003",
     fullName: "Lê Minh C",
     email: "c.le@mail.com",
@@ -81,7 +91,9 @@ const mockData = {
       },
     ],
   },
+
   "app-004": {
+    id: "app-004",
     code: "FA-2026-004",
     fullName: "Phạm Thu D",
     email: "d.pham@mail.com",
@@ -108,16 +120,119 @@ const mockData = {
   },
 };
 
+const getNowString = () =>
+  new Date().toISOString().slice(0, 19).replace("T", " ");
+
 const ApplicationDetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const application = useMemo(() => mockData[id], [id]);
+  const [applicationData, setApplicationData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [apiError, setApiError] = useState("");
+  const [actionError, setActionError] = useState("");
+  const [actionLoading, setActionLoading] = useState(false);
+
+  const application = useMemo(
+    () => applicationData || mockData[id],
+    [applicationData, id]
+  );
+
   const canReviewApplication = application?.status === "Pending";
 
   const [openApprove, setOpenApprove] = useState(false);
   const [openReject, setOpenReject] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
+
+  useEffect(() => {
+    const loadDetail = async () => {
+      try {
+        setLoading(true);
+        setApiError("");
+        const data = await getAdminApplicationDetail(id);
+        setApplicationData(data);
+      } catch (error) {
+        setApiError(
+          `Không gọi được API chi tiết, đang dùng mock data. Chi tiết: ${error.message}`
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDetail();
+  }, [id]);
+
+  const handleApprove = async () => {
+    try {
+      setActionLoading(true);
+      setActionError("");
+
+      await approveAdminApplication(id, {
+        note: "Approved from admin page",
+      });
+
+      setApplicationData((prev) => {
+        const source = prev || mockData[id];
+        if (!source) return prev;
+
+        return {
+          ...source,
+          status: "Approved",
+          history: [
+            ...(source.history || []),
+            {
+              time: getNowString(),
+              status: "Approved",
+              note: "Admin đã duyệt hồ sơ.",
+            },
+          ],
+        };
+      });
+
+      setOpenApprove(false);
+    } catch (error) {
+      setActionError(`Approve thất bại: ${error.message}`);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleReject = async () => {
+    try {
+      setActionLoading(true);
+      setActionError("");
+
+      await rejectAdminApplication(id, {
+        adminReviewNote: rejectReason,
+      });
+
+      setApplicationData((prev) => {
+        const source = prev || mockData[id];
+        if (!source) return prev;
+
+        return {
+          ...source,
+          status: "Rejected",
+          history: [
+            ...(source.history || []),
+            {
+              time: getNowString(),
+              status: "Rejected",
+              note: rejectReason,
+            },
+          ],
+        };
+      });
+
+      setOpenReject(false);
+      setRejectReason("");
+    } catch (error) {
+      setActionError(`Reject thất bại: ${error.message}`);
+    } finally {
+      setActionLoading(false);
+    }
+  };
 
   if (!application) {
     return (
@@ -125,6 +240,7 @@ const ApplicationDetailPage = () => {
         <header className="admin-page__header">
           <h1>Chi tiết hồ sơ Franchisee</h1>
           <p>Không tìm thấy hồ sơ với mã đã chọn.</p>
+          {!!apiError && <p>{apiError}</p>}
         </header>
 
         <AdminMenu />
@@ -149,6 +265,10 @@ const ApplicationDetailPage = () => {
           Theo dõi thông tin ứng viên, trạng thái xét duyệt và lịch sử xử lý hồ
           sơ.
         </p>
+
+        {loading && <p>Đang tải dữ liệu từ API...</p>}
+        {!!apiError && <p>{apiError}</p>}
+        {!!actionError && <p>{actionError}</p>}
       </header>
 
       <AdminMenu />
@@ -186,6 +306,7 @@ const ApplicationDetailPage = () => {
         <p>
           <strong>Địa chỉ:</strong> {application.address}
         </p>
+
         <p>
           <strong>Kinh nghiệm kinh doanh:</strong>{" "}
           {application.businessExperience}
@@ -204,12 +325,15 @@ const ApplicationDetailPage = () => {
               <button
                 className="btn btn--danger"
                 onClick={() => setOpenReject(true)}
+                disabled={actionLoading}
               >
                 Reject
               </button>
+
               <button
                 className="btn btn--primary"
                 onClick={() => setOpenApprove(true)}
+                disabled={actionLoading}
               >
                 Approve
               </button>
@@ -220,8 +344,9 @@ const ApplicationDetailPage = () => {
 
       <article className="detail-panel admin-surface">
         <h3>Lịch sử trạng thái hồ sơ (Audit trail)</h3>
+
         <ul className="history-list">
-          {application.history.map((entry) => (
+          {(application.history || []).map((entry) => (
             <li key={`${entry.time}-${entry.note}`}>
               <span>{entry.time}</span>
               <strong>{entry.status}</strong>
@@ -240,14 +365,17 @@ const ApplicationDetailPage = () => {
             <button
               className="btn btn--ghost"
               onClick={() => setOpenApprove(false)}
+              disabled={actionLoading}
             >
               Hủy
             </button>
+
             <button
               className="btn btn--primary"
-              onClick={() => setOpenApprove(false)}
+              onClick={handleApprove}
+              disabled={actionLoading}
             >
-              Xác nhận Approve
+              {actionLoading ? "Đang xử lý..." : "Xác nhận Approve"}
             </button>
           </>
         }
@@ -264,20 +392,23 @@ const ApplicationDetailPage = () => {
             <button
               className="btn btn--ghost"
               onClick={() => setOpenReject(false)}
+              disabled={actionLoading}
             >
               Hủy
             </button>
+
             <button
               className="btn btn--danger"
-              onClick={() => setOpenReject(false)}
-              disabled={!rejectReason.trim()}
+              onClick={handleReject}
+              disabled={!rejectReason.trim() || actionLoading}
             >
-              Xác nhận Reject
+              {actionLoading ? "Đang xử lý..." : "Xác nhận Reject"}
             </button>
           </>
         }
       >
         <label htmlFor="rejectReason">Nhập lý do từ chối:</label>
+
         <textarea
           id="rejectReason"
           rows="4"

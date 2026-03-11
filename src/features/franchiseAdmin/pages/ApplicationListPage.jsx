@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminMenu from '../components/adminMenu/AdminMenu';
 import StatusBadge from '../components/statusBadge/StatusBadge';
+import { getAdminApplications } from '../api/franchiseAdminApi';
 import './ApplicationListPage.css';
 
 const mockApplications = [
@@ -46,31 +47,55 @@ const ApplicationListPage = () => {
   const [search, setSearch] = useState('');
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [apiError, setApiError] = useState('');
+
+  useEffect(() => {
+    const loadApplications = async () => {
+      try {
+        setLoading(true);
+        setApiError('');
+        const data = await getAdminApplications();
+        setApplications(data);
+      } catch (error) {
+        setApiError(`Không gọi được API, đang hiển thị mock data. Chi tiết: ${error.message}`);
+        setApplications(mockApplications);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadApplications();
+  }, []);
 
   const normalizedSearch = search.trim().toLowerCase();
 
   const data = useMemo(() => {
-    return mockApplications.filter((item) => {
-      const fullName = item.fullName.toLowerCase();
-      const email = item.email.toLowerCase();
+    return applications.filter((item) => {
+      const fullName = String(item.fullName || '').toLowerCase();
+      const email = String(item.email || '').toLowerCase();
       const matchStatus = status === 'All' || item.status === status;
       const matchRegion = region === 'All' || item.region === region;
       const matchSearch =
         !normalizedSearch ||
         fullName.includes(normalizedSearch) ||
         email.includes(normalizedSearch);
-      const matchFrom = !fromDate || item.submittedAt >= fromDate;
-      const matchTo = !toDate || item.submittedAt <= toDate;
+      const submittedAt = String(item.submittedAt || '').slice(0, 10);
+      const matchFrom = !fromDate || submittedAt >= fromDate;
+      const matchTo = !toDate || submittedAt <= toDate;
 
       return matchStatus && matchRegion && matchSearch && matchFrom && matchTo;
     });
-  }, [status, region, normalizedSearch, fromDate, toDate]);
+  }, [applications, status, region, normalizedSearch, fromDate, toDate]);
 
   return (
     <section className="admin-page">
       <header className="admin-page__header">
         <h1>Danh sách hồ sơ đăng ký Franchisee</h1>
         <p>Quản lý hồ sơ theo trạng thái, khu vực và thời gian nộp.</p>
+        {loading && <p>Đang tải dữ liệu từ API...</p>}
+        {!!apiError && <p>{apiError}</p>}
       </header>
 
       <AdminMenu />
@@ -105,18 +130,19 @@ const ApplicationListPage = () => {
         />
 
         <input
-          type="text"
+          type="search"
+          placeholder="Tìm theo tên hoặc email..."
           value={search}
           onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search tên / email"
+          aria-label="Tìm hồ sơ"
         />
       </div>
 
-      <div className="table-wrapper">
+      <div className="admin-table-wrap admin-surface">
         <table className="application-table">
           <thead>
             <tr>
-              <th>Tên</th>
+              <th>Họ tên</th>
               <th>Email</th>
               <th>Khu vực</th>
               <th>Ngày nộp</th>
