@@ -1,8 +1,28 @@
 .admin-page {
+  --nike-white: #f8f8f8;
+  --nike-black: #0b0b0b;
+  --nike-black-soft: #141414;
+  --nike-surface: #181818;
+  --nike-surface-alt: #202020;
+  --nike-orange: #ff6a00;
+  --nike-orange-deep: #ff8b33;
+  --nike-border: rgba(255, 255, 255, 0.08);
+  --nike-text-muted: #a1a1aa;
+  --nike-text-soft: #6b7280;
+  --nike-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+
   max-width: 1240px;
   margin: 0 auto;
   padding: 2.5rem 1.75rem 3rem;
+   min-height: calc(100vh - 1rem);
   color: var(--nike-white);
+
+  background:
+    radial-gradient(circle at top right, rgba(255, 106, 0, 0.16), transparent 32%),
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.03), transparent 24%),
+    linear-gradient(180deg, #0b0b0b, #050505);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 22px;
 }
 
 .admin-page__header {

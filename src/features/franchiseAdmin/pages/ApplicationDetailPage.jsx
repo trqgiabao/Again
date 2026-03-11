@@ -23,16 +23,90 @@ const mockData = {
       { time: '2026-03-01 10:22', status: 'Pending', note: 'Email xác nhận đã gửi ứng viên.' },
     ],
   },
+  'app-002': {
+    code: 'FA-2026-002',
+    fullName: 'Trần Thị B',
+    email: 'b.tran@mail.com',
+    phoneNumber: '0912345678',
+    nationalId: '001298009876',
+    address: '95 Nguyễn Trãi, Thanh Xuân, Hà Nội',
+    businessExperience: '3 năm quản lý cửa hàng thời trang',
+    expectedCapital: '2,500,000,000',
+    preferredRegion: 'Hà Nội',
+    createdAt: '2026-02-28 09:05',
+    status: 'Approved',
+    history: [
+      { time: '2026-02-28 09:05', status: 'Pending', note: 'Hồ sơ vừa được tạo.' },
+      { time: '2026-03-01 15:10', status: 'Approved', note: 'Đã duyệt sau vòng phỏng vấn.' },
+    ],
+  },
+  'app-003': {
+    code: 'FA-2026-003',
+    fullName: 'Lê Minh C',
+    email: 'c.le@mail.com',
+    phoneNumber: '0933334444',
+    nationalId: '048201006543',
+    address: '22 Ông Ích Khiêm, Hải Châu, Đà Nẵng',
+    businessExperience: '2 năm kinh doanh chuỗi đồ uống',
+    expectedCapital: '1,800,000,000',
+    preferredRegion: 'Đà Nẵng',
+    createdAt: '2026-02-25 14:40',
+    status: 'Rejected',
+    history: [
+      { time: '2026-02-25 14:40', status: 'Pending', note: 'Hồ sơ vừa được tạo.' },
+      { time: '2026-02-26 10:00', status: 'Rejected', note: 'Ứng viên chưa đáp ứng mức vốn tối thiểu.' },
+    ],
+  },
+  'app-004': {
+    code: 'FA-2026-004',
+    fullName: 'Phạm Thu D',
+    email: 'd.pham@mail.com',
+    phoneNumber: '0977771122',
+    nationalId: '025196002468',
+    address: '118 Điện Biên Phủ, Bình Thạnh, TP.HCM',
+    businessExperience: '4 năm vận hành nhà hàng gia đình',
+    expectedCapital: '2,900,000,000',
+    preferredRegion: 'Hồ Chí Minh',
+    createdAt: '2026-02-24 08:50',
+    status: 'Pending',
+    history: [
+      { time: '2026-02-24 08:50', status: 'Pending', note: 'Hồ sơ vừa được tạo.' },
+      { time: '2026-02-24 09:15', status: 'Pending', note: 'Đã chuyển HR kiểm tra ban đầu.' },
+    ],
+  },
 };
 
 const ApplicationDetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const application = useMemo(() => mockData[id] ?? mockData['app-001'], [id]);
+
+  const application = useMemo(() => mockData[id], [id]);
 
   const [openApprove, setOpenApprove] = useState(false);
   const [openReject, setOpenReject] = useState(false);
   const [rejectReason, setRejectReason] = useState('');
+
+  if (!application) {
+    return (
+      <section className="admin-page">
+        <header className="admin-page__header">
+          <h1>Chi tiết hồ sơ Franchisee</h1>
+          <p>Không tìm thấy hồ sơ với mã đã chọn.</p>
+        </header>
+
+        <AdminMenu />
+
+        <article className="detail-panel admin-surface">
+          <button
+            className="btn btn--ghost"
+            onClick={() => navigate('/admin/applications')}
+          >
+            Quay lại danh sách hồ sơ
+          </button>
+        </article>
+      </section>
+    );
+  }
 
   return (
     <section className="admin-page">
@@ -65,13 +139,22 @@ const ApplicationDetailPage = () => {
         <p><strong>Kinh nghiệm kinh doanh:</strong> {application.businessExperience}</p>
 
         <div className="detail-actions">
-          <button className="btn btn--ghost" onClick={() => navigate('/admin/applications')}>
+          <button
+            className="btn btn--ghost"
+            onClick={() => navigate('/admin/applications')}
+          >
             Quay lại
           </button>
-          <button className="btn btn--danger" onClick={() => setOpenReject(true)}>
+          <button
+            className="btn btn--danger"
+            onClick={() => setOpenReject(true)}
+          >
             Reject
           </button>
-          <button className="btn btn--primary" onClick={() => setOpenApprove(true)}>
+          <button
+            className="btn btn--primary"
+            onClick={() => setOpenApprove(true)}
+          >
             Approve
           </button>
         </div>
@@ -94,16 +177,22 @@ const ApplicationDetailPage = () => {
         isOpen={openApprove}
         title="Xác nhận duyệt hồ sơ"
         onClose={() => setOpenApprove(false)}
-        actions={(
+        actions={
           <>
-            <button className="btn btn--ghost" onClick={() => setOpenApprove(false)}>
+            <button
+              className="btn btn--ghost"
+              onClick={() => setOpenApprove(false)}
+            >
               Hủy
             </button>
-            <button className="btn btn--primary" onClick={() => setOpenApprove(false)}>
+            <button
+              className="btn btn--primary"
+              onClick={() => setOpenApprove(false)}
+            >
               Xác nhận Approve
             </button>
           </>
-        )}
+        }
       >
         Hồ sơ sẽ được chuyển bước tạo hợp đồng.
       </Modal>
@@ -112,9 +201,12 @@ const ApplicationDetailPage = () => {
         isOpen={openReject}
         title="Từ chối hồ sơ"
         onClose={() => setOpenReject(false)}
-        actions={(
+        actions={
           <>
-            <button className="btn btn--ghost" onClick={() => setOpenReject(false)}>
+            <button
+              className="btn btn--ghost"
+              onClick={() => setOpenReject(false)}
+            >
               Hủy
             </button>
             <button
@@ -125,7 +217,7 @@ const ApplicationDetailPage = () => {
               Xác nhận Reject
             </button>
           </>
-        )}
+        }
       >
         <label htmlFor="rejectReason">Nhập lý do từ chối:</label>
         <textarea
