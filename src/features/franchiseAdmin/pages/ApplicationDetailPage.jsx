@@ -197,24 +197,24 @@ const ApplicationDetailPage = () => {
             onClick={() => navigate("/admin/applications")}
           >
             Quay lại
-            {canReviewApplication && (
-              <>
-                <button
-                  className="btn btn--danger"
-                  onClick={() => setOpenReject(true)}
-                >
-                  Reject
-                </button>
-                <button
-                  className="btn btn--primary"
-                  onClick={() => setOpenApprove(true)}
-                >
-                  Approve
-                </button>
-              </>
-            )}
-            
           </button>
+
+          {canReviewApplication && (
+            <>
+              <button
+                className="btn btn--danger"
+                onClick={() => setOpenReject(true)}
+              >
+                Reject
+              </button>
+              <button
+                className="btn btn--primary"
+                onClick={() => setOpenApprove(true)}
+              >
+                Approve
+              </button>
+            </>
+          )}
         </div>
       </article>
 
