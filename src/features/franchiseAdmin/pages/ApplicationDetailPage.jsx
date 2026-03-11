@@ -1,77 +1,109 @@
-import { useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import AdminMenu from '../components/adminMenu/AdminMenu';
-import StatusBadge from '../components/statusBadge/StatusBadge';
-import Modal from '../components/modal/Modal';
-import './ApplicationDetailPage.css';
+import { useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import AdminMenu from "../components/adminMenu/AdminMenu";
+import StatusBadge from "../components/statusBadge/StatusBadge";
+import Modal from "../components/modal/Modal";
+import "./ApplicationDetailPage.css";
 
 const mockData = {
-  'app-001': {
-    code: 'FA-2026-001',
-    fullName: 'Nguyễn Văn A',
-    email: 'a.nguyen@mail.com',
-    phoneNumber: '0901234567',
-    nationalId: '079204001111',
-    address: '12 Nguyễn Huệ, Q1, TP.HCM',
-    businessExperience: '5 năm vận hành chuỗi cafe',
-    expectedCapital: '3,000,000,000',
-    preferredRegion: 'Hồ Chí Minh',
-    createdAt: '2026-03-01 10:20',
-    status: 'Pending',
+  "app-001": {
+    code: "FA-2026-001",
+    fullName: "Nguyễn Văn A",
+    email: "a.nguyen@mail.com",
+    phoneNumber: "0901234567",
+    nationalId: "079204001111",
+    address: "12 Nguyễn Huệ, Q1, TP.HCM",
+    businessExperience: "5 năm vận hành chuỗi cafe",
+    expectedCapital: "3,000,000,000",
+    preferredRegion: "Hồ Chí Minh",
+    createdAt: "2026-03-01 10:20",
+    status: "Pending",
     history: [
-      { time: '2026-03-01 10:20', status: 'Pending', note: 'Hồ sơ vừa được tạo.' },
-      { time: '2026-03-01 10:22', status: 'Pending', note: 'Email xác nhận đã gửi ứng viên.' },
+      {
+        time: "2026-03-01 10:20",
+        status: "Pending",
+        note: "Hồ sơ vừa được tạo.",
+      },
+      {
+        time: "2026-03-01 10:22",
+        status: "Pending",
+        note: "Email xác nhận đã gửi ứng viên.",
+      },
     ],
   },
-  'app-002': {
-    code: 'FA-2026-002',
-    fullName: 'Trần Thị B',
-    email: 'b.tran@mail.com',
-    phoneNumber: '0912345678',
-    nationalId: '001298009876',
-    address: '95 Nguyễn Trãi, Thanh Xuân, Hà Nội',
-    businessExperience: '3 năm quản lý cửa hàng thời trang',
-    expectedCapital: '2,500,000,000',
-    preferredRegion: 'Hà Nội',
-    createdAt: '2026-02-28 09:05',
-    status: 'Approved',
+  "app-002": {
+    code: "FA-2026-002",
+    fullName: "Trần Thị B",
+    email: "b.tran@mail.com",
+    phoneNumber: "0912345678",
+    nationalId: "001298009876",
+    address: "95 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+    businessExperience: "3 năm quản lý cửa hàng thời trang",
+    expectedCapital: "2,500,000,000",
+    preferredRegion: "Hà Nội",
+    createdAt: "2026-02-28 09:05",
+    status: "Approved",
     history: [
-      { time: '2026-02-28 09:05', status: 'Pending', note: 'Hồ sơ vừa được tạo.' },
-      { time: '2026-03-01 15:10', status: 'Approved', note: 'Đã duyệt sau vòng phỏng vấn.' },
+      {
+        time: "2026-02-28 09:05",
+        status: "Pending",
+        note: "Hồ sơ vừa được tạo.",
+      },
+      {
+        time: "2026-03-01 15:10",
+        status: "Approved",
+        note: "Đã duyệt sau vòng phỏng vấn.",
+      },
     ],
   },
-  'app-003': {
-    code: 'FA-2026-003',
-    fullName: 'Lê Minh C',
-    email: 'c.le@mail.com',
-    phoneNumber: '0933334444',
-    nationalId: '048201006543',
-    address: '22 Ông Ích Khiêm, Hải Châu, Đà Nẵng',
-    businessExperience: '2 năm kinh doanh chuỗi đồ uống',
-    expectedCapital: '1,800,000,000',
-    preferredRegion: 'Đà Nẵng',
-    createdAt: '2026-02-25 14:40',
-    status: 'Rejected',
+  "app-003": {
+    code: "FA-2026-003",
+    fullName: "Lê Minh C",
+    email: "c.le@mail.com",
+    phoneNumber: "0933334444",
+    nationalId: "048201006543",
+    address: "22 Ông Ích Khiêm, Hải Châu, Đà Nẵng",
+    businessExperience: "2 năm kinh doanh chuỗi đồ uống",
+    expectedCapital: "1,800,000,000",
+    preferredRegion: "Đà Nẵng",
+    createdAt: "2026-02-25 14:40",
+    status: "Rejected",
     history: [
-      { time: '2026-02-25 14:40', status: 'Pending', note: 'Hồ sơ vừa được tạo.' },
-      { time: '2026-02-26 10:00', status: 'Rejected', note: 'Ứng viên chưa đáp ứng mức vốn tối thiểu.' },
+      {
+        time: "2026-02-25 14:40",
+        status: "Pending",
+        note: "Hồ sơ vừa được tạo.",
+      },
+      {
+        time: "2026-02-26 10:00",
+        status: "Rejected",
+        note: "Ứng viên chưa đáp ứng mức vốn tối thiểu.",
+      },
     ],
   },
-  'app-004': {
-    code: 'FA-2026-004',
-    fullName: 'Phạm Thu D',
-    email: 'd.pham@mail.com',
-    phoneNumber: '0977771122',
-    nationalId: '025196002468',
-    address: '118 Điện Biên Phủ, Bình Thạnh, TP.HCM',
-    businessExperience: '4 năm vận hành nhà hàng gia đình',
-    expectedCapital: '2,900,000,000',
-    preferredRegion: 'Hồ Chí Minh',
-    createdAt: '2026-02-24 08:50',
-    status: 'Pending',
+  "app-004": {
+    code: "FA-2026-004",
+    fullName: "Phạm Thu D",
+    email: "d.pham@mail.com",
+    phoneNumber: "0977771122",
+    nationalId: "025196002468",
+    address: "118 Điện Biên Phủ, Bình Thạnh, TP.HCM",
+    businessExperience: "4 năm vận hành nhà hàng gia đình",
+    expectedCapital: "2,900,000,000",
+    preferredRegion: "Hồ Chí Minh",
+    createdAt: "2026-02-24 08:50",
+    status: "Pending",
     history: [
-      { time: '2026-02-24 08:50', status: 'Pending', note: 'Hồ sơ vừa được tạo.' },
-      { time: '2026-02-24 09:15', status: 'Pending', note: 'Đã chuyển HR kiểm tra ban đầu.' },
+      {
+        time: "2026-02-24 08:50",
+        status: "Pending",
+        note: "Hồ sơ vừa được tạo.",
+      },
+      {
+        time: "2026-02-24 09:15",
+        status: "Pending",
+        note: "Đã chuyển HR kiểm tra ban đầu.",
+      },
     ],
   },
 };
@@ -81,10 +113,11 @@ const ApplicationDetailPage = () => {
   const { id } = useParams();
 
   const application = useMemo(() => mockData[id], [id]);
+  const canReviewApplication = application?.status === "Pending";
 
   const [openApprove, setOpenApprove] = useState(false);
   const [openReject, setOpenReject] = useState(false);
-  const [rejectReason, setRejectReason] = useState('');
+  const [rejectReason, setRejectReason] = useState("");
 
   if (!application) {
     return (
@@ -99,7 +132,7 @@ const ApplicationDetailPage = () => {
         <article className="detail-panel admin-surface">
           <button
             className="btn btn--ghost"
-            onClick={() => navigate('/admin/applications')}
+            onClick={() => navigate("/admin/applications")}
           >
             Quay lại danh sách hồ sơ
           </button>
@@ -112,7 +145,10 @@ const ApplicationDetailPage = () => {
     <section className="admin-page">
       <header className="admin-page__header">
         <h1>Chi tiết hồ sơ Franchisee</h1>
-        <p>Theo dõi thông tin ứng viên, trạng thái xét duyệt và lịch sử xử lý hồ sơ.</p>
+        <p>
+          Theo dõi thông tin ứng viên, trạng thái xét duyệt và lịch sử xử lý hồ
+          sơ.
+        </p>
       </header>
 
       <AdminMenu />
@@ -127,35 +163,57 @@ const ApplicationDetailPage = () => {
         </div>
 
         <div className="detail-grid">
-          <p><strong>Email:</strong> {application.email}</p>
-          <p><strong>Phone:</strong> {application.phoneNumber}</p>
-          <p><strong>CCCD:</strong> {application.nationalId}</p>
-          <p><strong>Khu vực mong muốn:</strong> {application.preferredRegion}</p>
-          <p><strong>Ngày nộp:</strong> {application.createdAt}</p>
-          <p><strong>Vốn dự kiến:</strong> {application.expectedCapital} VND</p>
+          <p>
+            <strong>Email:</strong> {application.email}
+          </p>
+          <p>
+            <strong>Phone:</strong> {application.phoneNumber}
+          </p>
+          <p>
+            <strong>CCCD:</strong> {application.nationalId}
+          </p>
+          <p>
+            <strong>Khu vực mong muốn:</strong> {application.preferredRegion}
+          </p>
+          <p>
+            <strong>Ngày nộp:</strong> {application.createdAt}
+          </p>
+          <p>
+            <strong>Vốn dự kiến:</strong> {application.expectedCapital} VND
+          </p>
         </div>
 
-        <p><strong>Địa chỉ:</strong> {application.address}</p>
-        <p><strong>Kinh nghiệm kinh doanh:</strong> {application.businessExperience}</p>
+        <p>
+          <strong>Địa chỉ:</strong> {application.address}
+        </p>
+        <p>
+          <strong>Kinh nghiệm kinh doanh:</strong>{" "}
+          {application.businessExperience}
+        </p>
 
         <div className="detail-actions">
           <button
             className="btn btn--ghost"
-            onClick={() => navigate('/admin/applications')}
+            onClick={() => navigate("/admin/applications")}
           >
             Quay lại
-          </button>
-          <button
-            className="btn btn--danger"
-            onClick={() => setOpenReject(true)}
-          >
-            Reject
-          </button>
-          <button
-            className="btn btn--primary"
-            onClick={() => setOpenApprove(true)}
-          >
-            Approve
+            {canReviewApplication && (
+              <>
+                <button
+                  className="btn btn--danger"
+                  onClick={() => setOpenReject(true)}
+                >
+                  Reject
+                </button>
+                <button
+                  className="btn btn--primary"
+                  onClick={() => setOpenApprove(true)}
+                >
+                  Approve
+                </button>
+              </>
+            )}
+            
           </button>
         </div>
       </article>
