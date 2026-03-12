@@ -1,144 +1,31 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminMenu from "../components/adminMenu/AdminMenu";
-import StatusBadge from "../components/statusBadge/StatusBadge";
 import Modal from "../components/modal/Modal";
+import StatusBadge from "../components/statusBadge/StatusBadge";
 import {
   approveAdminApplication,
   getAdminApplicationDetail,
   rejectAdminApplication,
 } from "../api/franchiseAdminApi";
 import "./ApplicationDetailPage.css";
+import "./AdminShared.css";
 
-const mockData = {
-  "app-001": {
-    id: "app-001",
-    code: "FA-2026-001",
-    fullName: "Nguyễn Văn A",
-    email: "a.nguyen@mail.com",
-    phoneNumber: "0901234567",
-    nationalId: "079204001111",
-    address: "12 Nguyễn Huệ, Q1, TP.HCM",
-    businessExperience: "5 năm vận hành chuỗi cafe",
-    expectedCapital: "3,000,000,000",
-    preferredRegion: "Hồ Chí Minh",
-    createdAt: "2026-03-01 10:20",
-    status: "Pending",
-    history: [
-      {
-        time: "2026-03-01 10:20",
-        status: "Pending",
-        note: "Hồ sơ vừa được tạo.",
-      },
-      {
-        time: "2026-03-01 10:22",
-        status: "Pending",
-        note: "Email xác nhận đã gửi ứng viên.",
-      },
-    ],
-  },
-
-  "app-002": {
-    id: "app-002",
-    code: "FA-2026-002",
-    fullName: "Trần Thị B",
-    email: "b.tran@mail.com",
-    phoneNumber: "0912345678",
-    nationalId: "001298009876",
-    address: "95 Nguyễn Trãi, Thanh Xuân, Hà Nội",
-    businessExperience: "3 năm quản lý cửa hàng thời trang",
-    expectedCapital: "2,500,000,000",
-    preferredRegion: "Hà Nội",
-    createdAt: "2026-02-28 09:05",
-    status: "Approved",
-    history: [
-      {
-        time: "2026-02-28 09:05",
-        status: "Pending",
-        note: "Hồ sơ vừa được tạo.",
-      },
-      {
-        time: "2026-03-01 15:10",
-        status: "Approved",
-        note: "Đã duyệt sau vòng phỏng vấn.",
-      },
-    ],
-  },
-
-  "app-003": {
-    id: "app-003",
-    code: "FA-2026-003",
-    fullName: "Lê Minh C",
-    email: "c.le@mail.com",
-    phoneNumber: "0933334444",
-    nationalId: "048201006543",
-    address: "22 Ông Ích Khiêm, Hải Châu, Đà Nẵng",
-    businessExperience: "2 năm kinh doanh chuỗi đồ uống",
-    expectedCapital: "1,800,000,000",
-    preferredRegion: "Đà Nẵng",
-    createdAt: "2026-02-25 14:40",
-    status: "Rejected",
-    history: [
-      {
-        time: "2026-02-25 14:40",
-        status: "Pending",
-        note: "Hồ sơ vừa được tạo.",
-      },
-      {
-        time: "2026-02-26 10:00",
-        status: "Rejected",
-        note: "Ứng viên chưa đáp ứng mức vốn tối thiểu.",
-      },
-    ],
-  },
-
-  "app-004": {
-    id: "app-004",
-    code: "FA-2026-004",
-    fullName: "Phạm Thu D",
-    email: "d.pham@mail.com",
-    phoneNumber: "0977771122",
-    nationalId: "025196002468",
-    address: "118 Điện Biên Phủ, Bình Thạnh, TP.HCM",
-    businessExperience: "4 năm vận hành nhà hàng gia đình",
-    expectedCapital: "2,900,000,000",
-    preferredRegion: "Hồ Chí Minh",
-    createdAt: "2026-02-24 08:50",
-    status: "Pending",
-    history: [
-      {
-        time: "2026-02-24 08:50",
-        status: "Pending",
-        note: "Hồ sơ vừa được tạo.",
-      },
-      {
-        time: "2026-02-24 09:15",
-        status: "Pending",
-        note: "Đã chuyển HR kiểm tra ban đầu.",
-      },
-    ],
-  },
+const formatCurrency = (value) => {
+  return `${new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: 0,
+  }).format(Number(value) || 0)} đ`;
 };
 
-const getNowString = () =>
-  new Date().toISOString().slice(0, 19).replace("T", " ");
-
 const ApplicationDetailPage = () => {
-  const navigate = useNavigate();
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [applicationData, setApplicationData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState("");
   const [actionError, setActionError] = useState("");
   const [actionLoading, setActionLoading] = useState(false);
-
-  const application = useMemo(
-    () => applicationData || mockData[id],
-    [applicationData, id]
-  );
-
-  const canReviewApplication = application?.status === "Pending";
 
   const [openApprove, setOpenApprove] = useState(false);
   const [openReject, setOpenReject] = useState(false);
@@ -149,12 +36,10 @@ const ApplicationDetailPage = () => {
       try {
         setLoading(true);
         setApiError("");
-        const data = await getAdminApplicationDetail(id);
-        setApplicationData(data);
+        const detail = await getAdminApplicationDetail(id);
+        setApplicationData(detail);
       } catch (error) {
-        setApiError(
-          `Không gọi được API chi tiết, đang dùng mock data. Chi tiết: ${error.message}`
-        );
+        setApiError(`Unable to load application detail. Details: ${error.message}`);
       } finally {
         setLoading(false);
       }
@@ -163,28 +48,31 @@ const ApplicationDetailPage = () => {
     loadDetail();
   }, [id]);
 
+  const timeline = useMemo(() => {
+    return Array.isArray(applicationData?.history) ? applicationData.history : [];
+  }, [applicationData]);
+
   const handleApprove = async () => {
     try {
       setActionLoading(true);
       setActionError("");
 
       await approveAdminApplication(id, {
-        note: "Approved from admin page",
+        note: "Approved by admin",
       });
 
       setApplicationData((prev) => {
-        const source = prev || mockData[id];
-        if (!source) return prev;
+        if (!prev) return prev;
 
         return {
-          ...source,
+          ...prev,
           status: "Approved",
           history: [
-            ...(source.history || []),
+            ...(prev.history || []),
             {
-              time: getNowString(),
+              time: new Date().toLocaleString("en-GB"),
               status: "Approved",
-              note: "Admin đã duyệt hồ sơ.",
+              note: "Approved by admin",
             },
           ],
         };
@@ -192,7 +80,7 @@ const ApplicationDetailPage = () => {
 
       setOpenApprove(false);
     } catch (error) {
-      setActionError(`Approve thất bại: ${error.message}`);
+      setActionError(`Approval failed. Details: ${error.message}`);
     } finally {
       setActionLoading(false);
     }
@@ -204,22 +92,21 @@ const ApplicationDetailPage = () => {
       setActionError("");
 
       await rejectAdminApplication(id, {
-        adminReviewNote: rejectReason,
+        rejectReason: rejectReason.trim(),
       });
 
       setApplicationData((prev) => {
-        const source = prev || mockData[id];
-        if (!source) return prev;
+        if (!prev) return prev;
 
         return {
-          ...source,
+          ...prev,
           status: "Rejected",
           history: [
-            ...(source.history || []),
+            ...(prev.history || []),
             {
-              time: getNowString(),
+              time: new Date().toLocaleString("en-GB"),
               status: "Rejected",
-              note: rejectReason,
+              note: rejectReason.trim(),
             },
           ],
         };
@@ -228,31 +115,30 @@ const ApplicationDetailPage = () => {
       setOpenReject(false);
       setRejectReason("");
     } catch (error) {
-      setActionError(`Reject thất bại: ${error.message}`);
+      setActionError(`Rejection failed. Details: ${error.message}`);
     } finally {
       setActionLoading(false);
     }
   };
 
-  if (!application) {
+  if (loading) {
     return (
       <section className="admin-page">
         <header className="admin-page__header">
-          <h1>Chi tiết hồ sơ Franchisee</h1>
-          <p>Không tìm thấy hồ sơ với mã đã chọn.</p>
-          {!!apiError && <p>{apiError}</p>}
+          <h1>Application Details</h1>
+          <p>Loading application details...</p>
         </header>
+      </section>
+    );
+  }
 
-        <AdminMenu />
-
-        <article className="detail-panel admin-surface">
-          <button
-            className="btn btn--ghost"
-            onClick={() => navigate("/admin/applications")}
-          >
-            Quay lại danh sách hồ sơ
-          </button>
-        </article>
+  if (!applicationData) {
+    return (
+      <section className="admin-page">
+        <header className="admin-page__header">
+          <h1>Application Details</h1>
+          <p>{apiError || "Application not found."}</p>
+        </header>
       </section>
     );
   }
@@ -260,162 +146,185 @@ const ApplicationDetailPage = () => {
   return (
     <section className="admin-page">
       <header className="admin-page__header">
-        <h1>Chi tiết hồ sơ Franchisee</h1>
-        <p>
-          Theo dõi thông tin ứng viên, trạng thái xét duyệt và lịch sử xử lý hồ
-          sơ.
-        </p>
-
-        {loading && <p>Đang tải dữ liệu từ API...</p>}
-        {!!apiError && <p>{apiError}</p>}
-        {!!actionError && <p>{actionError}</p>}
+        <h1>Application Details</h1>
+        <p>Review submitted franchise application information and decision history.</p>
       </header>
 
       <AdminMenu />
 
-      <article className="detail-panel admin-surface">
-        <div className="detail-panel__head">
-          <div>
-            <p className="detail-code">Mã hồ sơ: {application.code}</p>
-            <h2>{application.fullName}</h2>
-          </div>
-          <StatusBadge status={application.status} />
-        </div>
+      <div className="application-detail-page__topbar">
+        <button
+          type="button"
+          className="application-detail-page__back-btn"
+          onClick={() => navigate("/admin/applications")}
+        >
+          ← Back to list
+        </button>
 
-        <div className="detail-grid">
-          <p>
-            <strong>Email:</strong> {application.email}
-          </p>
-          <p>
-            <strong>Phone:</strong> {application.phoneNumber}
-          </p>
-          <p>
-            <strong>CCCD:</strong> {application.nationalId}
-          </p>
-          <p>
-            <strong>Khu vực mong muốn:</strong> {application.preferredRegion}
-          </p>
-          <p>
-            <strong>Ngày nộp:</strong> {application.createdAt}
-          </p>
-          <p>
-            <strong>Vốn dự kiến:</strong> {application.expectedCapital} VND
-          </p>
-        </div>
+        <div className="application-detail-page__actions">
+          <StatusBadge status={applicationData.status} />
 
-        <p>
-          <strong>Địa chỉ:</strong> {application.address}
-        </p>
-
-        <p>
-          <strong>Kinh nghiệm kinh doanh:</strong>{" "}
-          {application.businessExperience}
-        </p>
-
-        <div className="detail-actions">
           <button
-            className="btn btn--ghost"
-            onClick={() => navigate("/admin/applications")}
+            type="button"
+            className="application-detail-page__action-btn application-detail-page__action-btn--approve"
+            onClick={() => setOpenApprove(true)}
+            disabled={actionLoading || applicationData.status === "Approved"}
           >
-            Quay lại
+            Approve
           </button>
 
-          {canReviewApplication && (
-            <>
-              <button
-                className="btn btn--danger"
-                onClick={() => setOpenReject(true)}
-                disabled={actionLoading}
-              >
-                Reject
-              </button>
-
-              <button
-                className="btn btn--primary"
-                onClick={() => setOpenApprove(true)}
-                disabled={actionLoading}
-              >
-                Approve
-              </button>
-            </>
-          )}
+          <button
+            type="button"
+            className="application-detail-page__action-btn application-detail-page__action-btn--reject"
+            onClick={() => setOpenReject(true)}
+            disabled={actionLoading || applicationData.status === "Rejected"}
+          >
+            Reject
+          </button>
         </div>
-      </article>
+      </div>
 
-      <article className="detail-panel admin-surface">
-        <h3>Lịch sử trạng thái hồ sơ (Audit trail)</h3>
+      {!!apiError && <p className="application-detail-page__message">{apiError}</p>}
+      {!!actionError && <p className="application-detail-page__message">{actionError}</p>}
 
-        <ul className="history-list">
-          {(application.history || []).map((entry) => (
-            <li key={`${entry.time}-${entry.note}`}>
-              <span>{entry.time}</span>
-              <strong>{entry.status}</strong>
-              <p>{entry.note}</p>
-            </li>
-          ))}
-        </ul>
-      </article>
+      <div className="application-detail-page__grid">
+        <article className="admin-surface application-detail-page__card">
+          <h2>Applicant Information</h2>
+
+          <div className="application-detail-page__info-grid">
+            <div>
+              <label>Application Code</label>
+              <p>{applicationData.code || "N/A"}</p>
+            </div>
+            <div>
+              <label>Full Name</label>
+              <p>{applicationData.fullName}</p>
+            </div>
+            <div>
+              <label>Email</label>
+              <p>{applicationData.email}</p>
+            </div>
+            <div>
+              <label>Phone Number</label>
+              <p>{applicationData.phoneNumber}</p>
+            </div>
+            <div>
+              <label>National ID</label>
+              <p>{applicationData.nationalId}</p>
+            </div>
+            <div>
+              <label>Preferred Region</label>
+              <p>{applicationData.preferredRegion}</p>
+            </div>
+            <div className="application-detail-page__full">
+              <label>Address</label>
+              <p>{applicationData.address}</p>
+            </div>
+            <div className="application-detail-page__full">
+              <label>Business Experience</label>
+              <p>{applicationData.businessExperience}</p>
+            </div>
+            <div>
+              <label>Expected Capital</label>
+              <p>{formatCurrency(applicationData.expectedCapital)}</p>
+            </div>
+            <div>
+              <label>Submitted At</label>
+              <p>{String(applicationData.createdAt || "").replace("T", " ")}</p>
+            </div>
+          </div>
+        </article>
+
+        <article className="admin-surface application-detail-page__card">
+          <h2>Decision Timeline</h2>
+
+          {timeline.length > 0 ? (
+            <div className="application-detail-page__timeline">
+              {timeline.map((item, index) => (
+                <div
+                  key={`${item.time}-${item.status}-${index}`}
+                  className="application-detail-page__timeline-item"
+                >
+                  <div className="application-detail-page__timeline-dot" />
+                  <div className="application-detail-page__timeline-content">
+                    <div className="application-detail-page__timeline-row">
+                      <strong>{item.status}</strong>
+                      <span>{item.time}</span>
+                    </div>
+                    <p>{item.note || "No note provided."}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p>No history available.</p>
+          )}
+        </article>
+      </div>
 
       <Modal
         isOpen={openApprove}
-        title="Xác nhận duyệt hồ sơ"
+        title="Approve Application"
         onClose={() => setOpenApprove(false)}
-        actions={
-          <>
-            <button
-              className="btn btn--ghost"
-              onClick={() => setOpenApprove(false)}
-              disabled={actionLoading}
-            >
-              Hủy
-            </button>
-
-            <button
-              className="btn btn--primary"
-              onClick={handleApprove}
-              disabled={actionLoading}
-            >
-              {actionLoading ? "Đang xử lý..." : "Xác nhận Approve"}
-            </button>
-          </>
-        }
       >
-        Hồ sơ sẽ được chuyển bước tạo hợp đồng.
+        <p>Are you sure you want to approve this application?</p>
+
+        <div className="application-detail-page__modal-actions">
+          <button
+            type="button"
+            className="application-detail-page__secondary-btn"
+            onClick={() => setOpenApprove(false)}
+            disabled={actionLoading}
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            className="application-detail-page__primary-btn"
+            onClick={handleApprove}
+            disabled={actionLoading}
+          >
+            {actionLoading ? "Processing..." : "Confirm Approval"}
+          </button>
+        </div>
       </Modal>
 
       <Modal
         isOpen={openReject}
-        title="Từ chối hồ sơ"
+        title="Reject Application"
         onClose={() => setOpenReject(false)}
-        actions={
-          <>
-            <button
-              className="btn btn--ghost"
-              onClick={() => setOpenReject(false)}
-              disabled={actionLoading}
-            >
-              Hủy
-            </button>
-
-            <button
-              className="btn btn--danger"
-              onClick={handleReject}
-              disabled={!rejectReason.trim() || actionLoading}
-            >
-              {actionLoading ? "Đang xử lý..." : "Xác nhận Reject"}
-            </button>
-          </>
-        }
       >
-        <label htmlFor="rejectReason">Nhập lý do từ chối:</label>
+        <div className="application-detail-page__reject-form">
+          <label htmlFor="rejectReason">Rejection Reason</label>
+          <textarea
+            id="rejectReason"
+            value={rejectReason}
+            onChange={(event) => setRejectReason(event.target.value)}
+            placeholder="Enter the reason for rejection..."
+            rows={5}
+          />
+        </div>
 
-        <textarea
-          id="rejectReason"
-          rows="4"
-          value={rejectReason}
-          onChange={(event) => setRejectReason(event.target.value)}
-          placeholder="Ví dụ: Chưa đủ vốn theo yêu cầu khu vực..."
-        />
+        <div className="application-detail-page__modal-actions">
+          <button
+            type="button"
+            className="application-detail-page__secondary-btn"
+            onClick={() => setOpenReject(false)}
+            disabled={actionLoading}
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            className="application-detail-page__danger-btn"
+            onClick={handleReject}
+            disabled={actionLoading || !rejectReason.trim()}
+          >
+            {actionLoading ? "Processing..." : "Confirm Rejection"}
+          </button>
+        </div>
       </Modal>
     </section>
   );

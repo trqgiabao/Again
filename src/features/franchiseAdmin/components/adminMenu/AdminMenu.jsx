@@ -1,12 +1,12 @@
-import { NavLink } from 'react-router-dom';
-import './AdminMenu.css';
+import { NavLink } from "react-router-dom";
+import "./AdminMenu.css";
 
 const menuItems = [
-  { label: 'Hồ sơ', to: '/admin/applications' },
-  { label: 'Franchisee', to: '/admin/dashboard' },
-  { label: 'Store', to: '/admin/dashboard' },
-  { label: 'Purchase Order', to: '/admin/dashboard' },
-  { label: 'Báo cáo', to: '/admin/dashboard' },
+  { label: "Applications", to: "/admin/applications" },
+  { label: "Franchisees", to: "/admin/dashboard" },
+  { label: "Stores", to: "/admin/stores" },
+  { label: "Purchase Orders", to: "/admin/purchase-orders" },
+  { label: "Reports", to: "/admin/reports" },
 ];
 
 const AdminMenu = () => {
@@ -17,7 +17,7 @@ const AdminMenu = () => {
           key={item.label}
           to={item.to}
           className={({ isActive }) =>
-            `admin-menu__item ${isActive ? 'admin-menu__item--active' : ''}`
+            `admin-menu__item ${isActive ? "admin-menu__item--active" : ""}`
           }
         >
           {item.label}
