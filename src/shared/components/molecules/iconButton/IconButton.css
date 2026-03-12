@@ -16,7 +16,6 @@
 .icon-button--ghost:hover {
   background-color: hsla(0, 0%, 0%, 0.05);
 }
-/* Sizes */
 .icon-button--small {
   padding: 0.5rem;
 }
@@ -26,7 +25,6 @@
 .icon-button--large {
   padding: 1rem;
 }
-/* Badge */
 .icon-button__badge {
   position: absolute;
   top: 4px;

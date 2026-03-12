@@ -1,0 +1,84 @@
+.cta {
+  padding: 100px 0;
+  background: var(--color-black);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-nike-orange), transparent);
+}
+
+.cta__inner {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.cta__badge {
+  display: inline-block;
+  font-size: 14px;
+  color: var(--color-nike-orange);
+  padding: 6px 16px;
+  border: 1px solid rgba(250, 84, 0, 0.3);
+  border-radius: 24px;
+  margin-bottom: 24px;
+  background: rgba(250, 84, 0, 0.08);
+}
+
+.cta__title {
+  font-family: var(--font-display);
+  font-size: 44px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-white);
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+
+.cta__subtitle {
+  font-size: 17px;
+  color: var(--color-gray-300);
+  margin-bottom: 32px;
+  line-height: 1.7;
+}
+
+.cta__trust {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin-bottom: 36px;
+}
+
+.cta__trust-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--color-gray-300);
+}
+
+.cta__trust-icon {
+  color: var(--color-nike-orange);
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .cta {
+    padding: 64px 0;
+  }
+  .cta__title {
+    font-size: 32px;
+  }
+  .cta__trust {
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+}

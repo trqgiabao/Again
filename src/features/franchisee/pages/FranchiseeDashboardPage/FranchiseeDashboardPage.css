@@ -1,0 +1,198 @@
+.franchisee-dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.franchisee-dashboard__header {
+  margin-bottom: 1.5rem;
+}
+
+.franchisee-dashboard__title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+}
+
+.franchisee-dashboard__subtitle {
+  color: var(--color-muted-foreground, #666);
+  margin: 0;
+}
+
+.franchisee-dashboard__menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--color-border, #e5e5e5);
+}
+
+.franchisee-dashboard__nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--color-foreground, #111);
+  background: var(--color-muted, #f0f0f0);
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.franchisee-dashboard__nav-item:hover {
+  background: var(--color-accent, #ff6b35);
+  color: var(--color-accent-foreground, #fff);
+}
+
+.franchisee-dashboard__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.franchisee-dashboard__card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--color-background, #fff);
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.franchisee-dashboard__card svg {
+  flex-shrink: 0;
+  color: var(--color-accent, #ff6b35);
+}
+
+.franchisee-dashboard__card--royalty svg {
+  color: #c62828;
+}
+
+.franchisee-dashboard__card--net svg {
+  color: #2e7d32;
+}
+
+.franchisee-dashboard__card-label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-muted-foreground, #666);
+  margin-bottom: 0.25rem;
+}
+
+.franchisee-dashboard__card-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.franchisee-dashboard__charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.franchisee-dashboard__chart-card {
+  background: var(--color-background, #fff);
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: 10px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.franchisee-dashboard__chart-card h2 {
+  font-size: 1rem;
+  margin: 0 0 1rem 0;
+}
+
+.franchisee-dashboard__bar-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.franchisee-dashboard__bar-row {
+  display: grid;
+  grid-template-columns: 140px 1fr 120px;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.franchisee-dashboard__bar-label {
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.franchisee-dashboard__bar-track {
+  height: 24px;
+  background: var(--color-muted, #eee);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.franchisee-dashboard__bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff6b35, #f7931e);
+  border-radius: 6px;
+  min-width: 4px;
+  transition: width 0.4s ease;
+}
+
+.franchisee-dashboard__bar-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+.franchisee-dashboard__month-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 0.5rem;
+  height: 180px;
+  padding-top: 0.5rem;
+}
+
+.franchisee-dashboard__month-bar-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.franchisee-dashboard__month-bar {
+  width: 100%;
+  max-width: 36px;
+  min-height: 8px;
+  background: linear-gradient(180deg, #ff6b35, #f7931e);
+  border-radius: 6px 6px 0 0;
+  transition: height 0.3s ease;
+}
+
+.franchisee-dashboard__month-label {
+  font-size: 0.75rem;
+  color: var(--color-muted-foreground, #666);
+}
+
+@media (max-width: 900px) {
+  .franchisee-dashboard__charts {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .franchisee-dashboard__bar-row {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  .franchisee-dashboard__bar-value {
+    text-align: left;
+  }
+}

@@ -10,7 +10,6 @@
   border: none;
   text-decoration: none;
 }
-/* Variants */
 .button--primary {
   background-color: var(--color-primary);
   color: var(--color-primary-foreground);
@@ -44,7 +43,6 @@
 .button--ghost:hover {
   background-color: var(--color-muted);
 }
-/* Sizes */
 .button--small {
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
@@ -57,7 +55,6 @@
   padding: 1rem 2.5rem;
   font-size: 1.125rem;
 }
-/* Modifiers */
 .button--full-width {
   width: 100%;
 }

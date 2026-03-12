@@ -1,0 +1,291 @@
+.franchise-success {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 960px;
+    width: 100%;
+    max-height: 90vh;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+    animation: slideUp 0.4s ease;
+}
+
+.franchise-success__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.15);
+    color: var(--color-gray-700);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.franchise-success__close:hover {
+    background: rgba(0, 0, 0, 0.25);
+}
+
+/* Left Column */
+.franchise-success__info {
+    background: linear-gradient(160deg, #111111 0%, #1a1a1a 50%, #fa5400 150%);
+    color: var(--color-white);
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.franchise-success__badge {
+    display: inline-block;
+    font-size: 13px;
+    color: #4ade80;
+    padding: 5px 14px;
+    border: 1px solid rgba(74, 222, 128, 0.35);
+    border-radius: 20px;
+    margin-bottom: 20px;
+    background: rgba(74, 222, 128, 0.1);
+    font-weight: 500;
+}
+
+.franchise-success__info-title {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin-bottom: 16px;
+}
+
+.franchise-success__info-desc {
+    font-size: 15px;
+    color: var(--color-gray-300);
+    line-height: 1.7;
+    margin-bottom: 32px;
+}
+
+/* Timeline */
+.franchise-success__timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+    padding-left: 24px;
+}
+
+.franchise-success__timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.franchise-success__timeline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    position: relative;
+}
+
+.franchise-success__timeline-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    flex-shrink: 0;
+    position: absolute;
+    left: -24px;
+    top: 2px;
+}
+
+.franchise-success__timeline-item--active .franchise-success__timeline-dot {
+    background: var(--color-nike-orange);
+    border-color: var(--color-nike-orange);
+    box-shadow: 0 0 10px rgba(250, 84, 0, 0.4);
+}
+
+.franchise-success__timeline-title {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-white);
+}
+
+.franchise-success__timeline-desc {
+    display: block;
+    font-size: 12px;
+    color: var(--color-gray-400);
+    margin-top: 2px;
+}
+
+/* Right Column */
+.franchise-success__details {
+    background: var(--color-white);
+    padding: 48px 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow-y: auto;
+}
+
+.franchise-success__icon-wrapper {
+    margin-bottom: 16px;
+}
+
+.franchise-success__icon {
+    font-size: 48px;
+    animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.franchise-success__title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--color-black);
+    margin-bottom: 6px;
+}
+
+.franchise-success__subtitle {
+    font-size: 14px;
+    color: var(--color-gray-500);
+    margin-bottom: 24px;
+}
+
+.franchise-success__status-card {
+    width: 100%;
+    background: var(--color-gray-50, #f9fafb);
+    border: 1px solid var(--color-gray-200);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+}
+
+.franchise-success__status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.franchise-success__status-row+.franchise-success__status-row {
+    border-top: 1px solid var(--color-gray-200);
+}
+
+.franchise-success__status-label {
+    font-size: 13px;
+    color: var(--color-gray-500);
+    font-weight: 500;
+}
+
+.franchise-success__status-badge {
+    font-size: 12px;
+    font-weight: 700;
+    color: #d97706;
+    background: #fef3c7;
+    padding: 4px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+}
+
+.franchise-success__status-id {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-black);
+    font-family: monospace;
+    letter-spacing: 0.03em;
+}
+
+.franchise-success__info-box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.franchise-success__info-box-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--color-gray-600);
+    line-height: 1.5;
+}
+
+.franchise-success__info-box-icon {
+    flex-shrink: 0;
+    font-size: 16px;
+}
+
+.franchise-success__btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--color-nike-orange);
+    color: var(--color-white);
+    border: none;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    letter-spacing: 0.02em;
+}
+
+.franchise-success__btn:hover {
+    background: var(--color-nike-orange-dark);
+    transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .franchise-success {
+        grid-template-columns: 1fr;
+        max-height: 95vh;
+    }
+
+    .franchise-success__info {
+        padding: 32px 24px;
+    }
+
+    .franchise-success__info-title {
+        font-size: 28px;
+    }
+
+    .franchise-success__details {
+        padding: 32px 24px;
+    }
+
+    .franchise-success__close {
+        background: rgba(255, 255, 255, 0.15);
+        color: var(--color-white);
+    }
+}

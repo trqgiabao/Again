@@ -1,0 +1,188 @@
+.admin-page {
+    padding: 4rem 5%;
+    background: #ffffff;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.page-title {
+    font-size: 4rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #111;
+}
+
+.filter-bar {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.filter-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-select,
+.search-input {
+    padding: 0.8rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    min-width: 180px;
+    font-size: 1rem;
+}
+
+.action-bar {
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
+.add-btn {
+    background: #f35000;
+    color: white;
+    border: none;
+    padding: 0.9rem 1.8rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.add-btn:hover {
+    background: #d94500;
+}
+
+.table-container {
+    width: 90%;
+    margin: 0 auto;
+    overflow-x: auto;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 1.2rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+}
+
+tr:hover {
+    background: #f8fafc;
+}
+
+.status {
+    font-weight: 600;
+}
+
+.status.active {
+    color: #10b981;
+}
+
+.status.inactive {
+    color: #ef4444;
+}
+
+.btn-detail,
+.btn-edit,
+.btn-toggle {
+    background: none;
+    border: none;
+    color: #f35000;
+    cursor: pointer;
+    margin-right: 0.8rem;
+    font-weight: 500;
+}
+
+.btn-toggle.deactivate {
+    color: #ef4444;
+}
+
+.btn-toggle.activate {
+    color: #10b981;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+}
+
+.modal h2 {
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-submit,
+.btn-cancel {
+    flex: 1;
+    padding: 0.9rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-submit {
+    background: #f35000;
+    color: white;
+    border: none;
+}
+
+.btn-cancel {
+    background: #e5e7eb;
+    color: #374151;
+    border: none;
+}
