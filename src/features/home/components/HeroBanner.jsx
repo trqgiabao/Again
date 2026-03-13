@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import Button from '../../../shared/components/atoms/Button';
-import useScrollReveal from '../../../shared/hooks/useScrollReveal';
-import useCountUp from '../../../shared/hooks/useCountUp';
+import { useCallback, useEffect, useState } from 'react';
 import hero1 from '../../../assets/hero-1.jpg';
 import hero2 from '../../../assets/hero-2.jpg';
 import hero3 from '../../../assets/hero-3.jpg';
 import hero4 from '../../../assets/hero-4.jpg';
 import hero5 from '../../../assets/hero-5.jpg';
+import Button from '../../../shared/components/atoms/Button';
+import useCountUp from '../../../shared/hooks/useCountUp';
+import useScrollReveal from '../../../shared/hooks/useScrollReveal';
 import './HeroBanner.css';
 
 const slides = [
@@ -17,7 +17,8 @@ const slides = [
   { image: hero5, subtitle: 'Strong Partnership Network' },
 ];
 
-const HeroBanner = () => {
+const HeroBanner = ({ onApplyClick }) => {
+  const [ref, isVisible] = useScrollReveal();
   const [current, setCurrent] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [statsRef, statsVisible] = useScrollReveal({ threshold: 0.3 });
@@ -53,7 +54,7 @@ const HeroBanner = () => {
       <div className="hero__overlay" />
 
       <div className="hero__content container">
-        <div className="hero__text">
+        <div ref={ref} className="">
           <div className="hero__badge">Nike Franchise System</div>
           <h1 className="hero__title">
             Become a Nike<br />
@@ -62,8 +63,8 @@ const HeroBanner = () => {
           <p className="hero__subtitle" key={current}>
             {slides[current].subtitle} — Start your journey with the world's most iconic sports brand.
           </p>
-          <div className="hero__actions">
-            <Button variant="accent" size="lg" className="btn-animate">Apply for Franchise</Button>
+          <div ref={ref} className={"hero__action"}>
+            <Button variant="accent" size="lg" className={`btn-animate ${isVisible ? 'reveal--visible' : ''}`} onClick={onApplyClick}>Apply for Franchise</Button>
             <Button variant="secondary" size="lg" className="hero__btn-secondary">Learn More</Button>
           </div>
         </div>

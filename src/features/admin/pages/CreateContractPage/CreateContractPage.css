@@ -117,6 +117,37 @@
   color: var(--color-muted-foreground, #666);
 }
 
+.create-contract-page__loading,
+.create-contract-page__error {
+  margin: 0 0 0.75rem;
+}
+
+.create-contract-page__error {
+  color: #c62828;
+}
+
+.create-contract-page__link {
+  color: var(--color-accent, #ff6b35);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.create-contract-page__link:hover {
+  text-decoration: underline;
+}
+
+.create-contract-page__warning {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.create-contract-page__warning code {
+  font-size: 0.9em;
+  padding: 0.1em 0.35em;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
 @media (max-width: 640px) {
   .create-contract-page__franchisee-grid,
   .create-contract-page__form-grid {

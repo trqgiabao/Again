@@ -27,7 +27,7 @@ const HomePage = () => {
   return (
     <MainLayout onJoinClick={() => setModalOpen(true)}>
       <FallingShoes />
-      <HeroBanner />
+      <HeroBanner onApplyClick={() => setModalOpen(true)} />
       <SectionDivider />
       <BrandStory />
       <SectionDivider variant="accent" />

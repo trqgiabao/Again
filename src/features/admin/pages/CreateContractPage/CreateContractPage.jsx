@@ -1,53 +1,158 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams, Link } from "react-router-dom";
 import { Button, Input } from "@/shared/components/atoms";
+import { getAdminApplicationDetail } from "@/features/franchiseAdmin/api/adminApplications";
+import { createContract, sendContract } from "../../api/contracts";
 import "./CreateContractPage.css";
 
-const MOCK_FRANCHISEE = {
-  id: "FR-001",
-  fullName: "Nguyễn Văn A",
-  email: "nguyenvana@email.com",
-  phone: "0901234567",
-  idNumber: "001099012345",
-  address: "123 Đường XYZ, Quận 1, TP.HCM",
-  experience: "5 năm kinh doanh bán lẻ",
-  investmentAmount: 5000000000,
-  region: "TP. Hồ Chí Minh",
-  appliedAt: "2026-03-01",
-};
-
-const CONTRACT_TERM_OPTIONS = [
-  { value: "3", label: "3 năm" },
-  { value: "5", label: "5 năm" },
-  { value: "10", label: "10 năm" },
-];
-
 const CreateContractPage = () => {
-  const [royaltyRate, setRoyaltyRate] = useState("8");
-  const [term, setTerm] = useState("5");
-  const [exclusiveArea, setExclusiveArea] = useState("TP. Hồ Chí Minh");
-  const [effectiveDate, setEffectiveDate] = useState("2026-04-01");
-  const [contractStatus, setContractStatus] = useState("draft");
+  const [searchParams] = useSearchParams();
+  const applicationId = searchParams.get("applicationId");
+
+  const [application, setApplication] = useState(null);
+  const [loading, setLoading] = useState(!!applicationId);
+  const [error, setError] = useState(null);
+
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [region, setRegion] = useState("");
+  const [contractFileUrl, setContractFileUrl] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [sendError, setSendError] = useState(null);
 
-  const franchisee = MOCK_FRANCHISEE;
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") || localStorage.getItem("authToken") : null;
+
+  useEffect(() => {
+    if (!applicationId) {
+      setLoading(false);
+      return;
+    }
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+    getAdminApplicationDetail(applicationId, { token })
+      .then((data) => {
+        if (!cancelled) {
+          setApplication(data);
+          if (!region && data.preferredRegion) setRegion(data.preferredRegion);
+          if (!startDate) {
+            const d = new Date();
+            d.setMonth(d.getMonth() + 1);
+            setStartDate(d.toISOString().slice(0, 10));
+          }
+          if (!endDate) {
+            const d = new Date();
+            d.setFullYear(d.getFullYear() + 3);
+            setEndDate(d.toISOString().slice(0, 10));
+          }
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err.message || "Không tải được thông tin hồ sơ.");
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, [applicationId, token]);
 
   const handleSendContract = (e) => {
     e.preventDefault();
+    const packageSelectionId = application?.packageSelectionId;
+    if (!packageSelectionId) {
+      setSendError("Hồ sơ chưa có gói được chọn. Consultant cần chọn gói trước (Task 1.9).");
+      return;
+    }
+    if (!startDate || !endDate) {
+      setSendError("Vui lòng nhập Ngày bắt đầu và Ngày kết thúc.");
+      return;
+    }
+    if (new Date(endDate) <= new Date(startDate)) {
+      setSendError("Ngày kết thúc phải sau ngày bắt đầu.");
+      return;
+    }
     setSending(true);
-    setTimeout(() => {
-      setSending(false);
-      setSent(true);
-      setContractStatus("sent");
-    }, 1200);
+    setSendError(null);
+    createContract(
+      packageSelectionId,
+      { startDate, endDate, region, contractFileUrl },
+      { token }
+    )
+      .then((created) => {
+        const contractId = created?.id ?? created?.contractId;
+        if (!contractId) {
+          throw new Error("Không nhận được ID hợp đồng từ server.");
+        }
+        return sendContract(contractId, { token });
+      })
+      .then(() => {
+        setSent(true);
+      })
+      .catch((err) => {
+        setSendError(err.message || "Tạo hoặc gửi hợp đồng thất bại.");
+      })
+      .finally(() => {
+        setSending(false);
+      });
   };
+
+  const formatVND = (value) => {
+    if (value == null) return "—";
+    return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND", maximumFractionDigits: 0 }).format(Number(value));
+  };
+
+  if (!applicationId) {
+    return (
+      <div className="create-contract-page">
+        <header className="create-contract-page__header">
+          <h1 className="create-contract-page__title">Tạo & Gửi hợp đồng</h1>
+          <p className="create-contract-page__subtitle">Chưa chọn hồ sơ. Vui lòng chọn hồ sơ từ danh sách hoặc vào từ trang chi tiết sau khi Approve.</p>
+        </header>
+        <div className="create-contract-card">
+          <Link to="/admin/applications" className="create-contract-page__link">← Quay lại danh sách hồ sơ</Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="create-contract-page">
+        <header className="create-contract-page__header">
+          <h1 className="create-contract-page__title">Tạo & Gửi hợp đồng</h1>
+        </header>
+        <div className="create-contract-card">
+          <p className="create-contract-page__loading">Đang tải thông tin hồ sơ...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !application) {
+    return (
+      <div className="create-contract-page">
+        <header className="create-contract-page__header">
+          <h1 className="create-contract-page__title">Tạo & Gửi hợp đồng</h1>
+        </header>
+        <div className="create-contract-card">
+          <p className="create-contract-page__error">{error || "Không tìm thấy hồ sơ."}</p>
+          <Link to="/admin/applications" className="create-contract-page__link">← Quay lại danh sách hồ sơ</Link>
+        </div>
+      </div>
+    );
+  }
+
+  const franchisee = application;
+  const packageSelectionId = application.packageSelectionId;
+  const canCreate = !!packageSelectionId;
 
   return (
     <div className="create-contract-page">
       <header className="create-contract-page__header">
         <h1 className="create-contract-page__title">Tạo & Gửi hợp đồng</h1>
         <p className="create-contract-page__subtitle">
-          Franchisee vừa được duyệt — điền thông tin hợp đồng và gửi để ký
+          Hồ sơ đã chọn gói (PackageSelected) — điền thông tin hợp đồng, tạo rồi gửi cho Franchisee ký.
         </p>
       </header>
 
@@ -56,90 +161,88 @@ const CreateContractPage = () => {
         <div className="create-contract-page__franchisee-grid">
           <div><strong>Họ tên:</strong> {franchisee.fullName}</div>
           <div><strong>Email:</strong> {franchisee.email}</div>
-          <div><strong>Số điện thoại:</strong> {franchisee.phone}</div>
-          <div><strong>Khu vực đăng ký:</strong> {franchisee.region}</div>
-          <div><strong>Vốn đầu tư dự kiến:</strong> {franchisee.investmentAmount?.toLocaleString("vi-VN")} VND</div>
+          <div><strong>Số điện thoại:</strong> {franchisee.phoneNumber}</div>
+          <div><strong>Khu vực mong muốn:</strong> {franchisee.preferredRegion}</div>
+          <div><strong>Vốn đầu tư dự kiến:</strong> {formatVND(franchisee.expectedCapital)}</div>
         </div>
       </section>
 
-      {!sent ? (
+      {!canCreate && (
+        <div className="create-contract-card create-contract-page__warning">
+          <p><strong>Chưa thể tạo hợp đồng.</strong> Hồ sơ chưa có gói được chọn (Consultant cần thực hiện Task 1.9 — Chọn gói Franchise). Khi backend trả về <code>packageSelectionId</code> trong chi tiết hồ sơ, form bên dưới sẽ mở.</p>
+          <Link to="/admin/applications" className="create-contract-page__link">← Quay lại danh sách hồ sơ</Link>
+        </div>
+      )}
+
+      {canCreate && !sent ? (
         <form onSubmit={handleSendContract} className="create-contract-page__form create-contract-card">
-          <h2>Điều khoản hợp đồng</h2>
+          <h2>Thông tin hợp đồng (BE Task 2.4 + 2.5)</h2>
+          {sendError && <p className="create-contract-page__error">{sendError}</p>}
           <div className="create-contract-page__form-grid">
             <div className="create-contract-page__field">
-              <label>Royalty Rate (%)</label>
-              <Input
-                type="number"
-                min="1"
-                max="20"
-                step="0.5"
-                value={royaltyRate}
-                onChange={(e) => setRoyaltyRate(e.target.value)}
-                placeholder="VD: 8"
-              />
-              <span className="create-contract-page__hint">Tỷ lệ HQ thu trên mỗi đơn hàng</span>
-            </div>
-            <div className="create-contract-page__field">
-              <label>Thời hạn hợp đồng</label>
-              <select
-                className="create-contract-page__select"
-                value={term}
-                onChange={(e) => setTerm(e.target.value)}
-              >
-                {CONTRACT_TERM_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>{opt.label}</option>
-                ))}
-              </select>
-            </div>
-            <div className="create-contract-page__field">
-              <label>Khu vực hoạt động độc quyền</label>
-              <Input
-                type="text"
-                value={exclusiveArea}
-                onChange={(e) => setExclusiveArea(e.target.value)}
-                placeholder="VD: TP. Hồ Chí Minh"
-              />
-            </div>
-            <div className="create-contract-page__field">
-              <label>Ngày bắt đầu hiệu lực</label>
+              <label>Ngày bắt đầu (startDate)</label>
               <Input
                 type="date"
-                value={effectiveDate}
-                onChange={(e) => setEffectiveDate(e.target.value)}
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                required
+              />
+            </div>
+            <div className="create-contract-page__field">
+              <label>Ngày kết thúc (endDate)</label>
+              <Input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                required
+              />
+            </div>
+            <div className="create-contract-page__field">
+              <label>Khu vực (region)</label>
+              <Input
+                type="text"
+                value={region}
+                onChange={(e) => setRegion(e.target.value)}
+                placeholder="VD: Binh Duong"
+              />
+            </div>
+            <div className="create-contract-page__field">
+              <label>URL file hợp đồng (contractFileUrl, tùy chọn)</label>
+              <Input
+                type="url"
+                value={contractFileUrl}
+                onChange={(e) => setContractFileUrl(e.target.value)}
+                placeholder="https://..."
               />
             </div>
           </div>
 
           <section className="create-contract-page__preview create-contract-card create-contract-card--preview">
-            <h3>Xem trước nội dung hợp đồng</h3>
+            <h3>Xem trước</h3>
             <div className="create-contract-page__preview-body">
-              <p><strong>Bên nhượng quyền:</strong> Nike Vietnam (HQ)</p>
               <p><strong>Bên nhận quyền:</strong> {franchisee.fullName}</p>
-              <p><strong>Royalty:</strong> {royaltyRate}% trên doanh thu mỗi đơn hàng.</p>
-              <p><strong>Thời hạn:</strong> {CONTRACT_TERM_OPTIONS.find((o) => o.value === term)?.label}.</p>
-              <p><strong>Khu vực độc quyền:</strong> {exclusiveArea}.</p>
-              <p><strong>Ngày hiệu lực:</strong> {effectiveDate}.</p>
-              <p className="create-contract-page__preview-note">
-                Các quyền và nghĩa vụ chi tiết theo bản hợp đồng chính thức gửi qua email.
-              </p>
+              <p><strong>Ngày bắt đầu:</strong> {startDate}</p>
+              <p><strong>Ngày kết thúc:</strong> {endDate}</p>
+              <p><strong>Khu vực:</strong> {region || "—"}</p>
+              <p className="create-contract-page__preview-note">Sau khi bấm Gửi: tạo hợp đồng (Drafted) rồi gửi email link ký cho Franchisee (Sent).</p>
             </div>
           </section>
 
           <div className="create-contract-page__actions">
             <Button type="submit" variant="primary" size="large" disabled={sending}>
-              {sending ? "Đang gửi…" : "Gửi hợp đồng cho Franchisee"}
+              {sending ? "Đang tạo & gửi…" : "Tạo hợp đồng & Gửi cho Franchisee"}
             </Button>
           </div>
         </form>
-      ) : (
+      ) : canCreate && sent ? (
         <div className="create-contract-page__success create-contract-card">
-          <h2>Đã gửi hợp đồng</h2>
+          <h2>Đã tạo và gửi hợp đồng</h2>
           <p>Hợp đồng đã được gửi tới <strong>{franchisee.email}</strong> kèm link ký.</p>
           <p><strong>Trạng thái:</strong> <span className="create-contract-page__status create-contract-page__status--sent">Sent</span></p>
-          <p className="create-contract-page__next">Sau khi Franchisee ký xong → Hệ thống cấp phát tài khoản tự động.</p>
-          <Button variant="secondary" onClick={() => setSent(false)}>Chỉnh sửa lại</Button>
+          <p className="create-contract-page__next">Franchisee ký xong (FranchiseeSigned) → Admin ký (Task 2.6) → FullySigned → IAM tạo tài khoản Franchisee.</p>
+          <Link to="/admin/applications" className="create-contract-page__link">← Quay lại danh sách hồ sơ</Link>
         </div>
-      )}
+      ) : null}
     </div>
   );
 };

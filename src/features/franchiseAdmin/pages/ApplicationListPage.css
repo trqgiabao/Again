@@ -1,100 +1,33 @@
-@import './AdminShared.css';
-.filters {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 0.9rem;
-  margin-bottom: 1.2rem;
-}
-
-.filters select,
-.filters input {
-  height: 44px;
-  border: 1px solid var(--nike-border);
-  background: linear-gradient(180deg, #1b1b1b, #141414);
-  color: var(--nike-white);
-  border-radius: 12px;
-  padding: 0 0.9rem;
-  outline: none;
-  transition: all 0.18s ease;
-}
-
-.filters select:hover,
-.filters input:hover {
-  border-color: rgba(255, 106, 0, 0.25);
-}
-
-.filters select:focus,
-.filters input:focus {
-  border-color: rgba(255, 106, 0, 0.4);
-  box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.12);
-}
-
-.filters input::placeholder {
-  color: var(--nike-text-muted);
-}
-
-.table-wrapper {
-  overflow-x: auto;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)),
-    linear-gradient(155deg, #1a1a1a, #111111);
-  border-radius: 16px;
-  border: 1px solid var(--nike-border);
-  box-shadow: var(--nike-shadow);
-}
-
 .application-table {
   width: 100%;
-  border-collapse: collapse;
+  min-width: 760px;
 }
 
-.application-table th,
-.application-table td {
+.application-table thead th {
   text-align: left;
-  padding: 1rem;
+  padding: 18px 20px;
+  color: var(--brand-2);
+  font-weight: 700;
+  font-size: 1.05rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.application-table tbody td {
+  padding: 18px 20px;
+  color: var(--text-primary);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  vertical-align: middle;
 }
 
-.application-table th {
-  color: #ffb06d;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.application-table td {
-  color: #f1f1f1;
-}
-
-.application-table td:first-child {
-  font-weight: 700;
-  color: var(--nike-white);
-}
-
-.application-table td:nth-child(2),
-.application-table td:nth-child(4) {
-  color: var(--nike-text-muted);
-}
-
-.application-table tbody tr {
+.application-table__row {
   cursor: pointer;
-  transition: background 0.15s ease, transform 0.12s ease;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.application-table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.03);
+.application-table__row:hover {
+  background: rgba(255, 140, 26, 0.06);
 }
 
-.application-table tbody tr:hover td:first-child {
-  color: #ff9d52;
-}
-
-@media (max-width: 900px) {
-  .filters {
-    grid-template-columns: 1fr;
-  }
-
-  .application-table {
-    min-width: 720px;
-  }
+.application-table tbody tr:last-child td {
+  border-bottom: none;
 }

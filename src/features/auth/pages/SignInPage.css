@@ -1,0 +1,126 @@
+/* ===== Page Wrapper ===== */
+
+.signin-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== Card ===== */
+
+.signin-card {
+  width: 100%;
+  max-width: 420px;
+
+  background: rgba(20,20,20,0.85);
+  backdrop-filter: blur(16px);
+
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+
+  padding: 32px;
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.6),
+    0 0 40px rgba(255,106,0,0.08);
+}
+
+/* ===== Title ===== */
+
+.signin-title {
+  color: white;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.signin-desc {
+  color: #a1a1aa;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+/* ===== Form ===== */
+
+.signin-form {
+  margin-top: 20px;
+}
+
+.signin-label {
+  font-size: 14px;
+  color: #d4d4d8;
+}
+
+.signin-input {
+  width: 100%;
+  margin-top: 6px;
+
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.12);
+
+  border-radius: 8px;
+  padding: 10px 12px;
+
+  color: white;
+
+  transition: all .25s;
+}
+
+.signin-input:focus {
+  outline: none;
+  border-color: var(--nike-orange);
+  box-shadow: 0 0 0 2px rgba(255,106,0,0.25);
+}
+
+/* ===== Button ===== */
+
+.signin-button {
+  width: 100%;
+  margin-top: 10px;
+
+  background: linear-gradient(90deg,#ff6a00,#ff8b33);
+  border: none;
+
+  border-radius: 8px;
+  padding: 10px;
+
+  font-weight: 600;
+  color: white;
+
+  transition: all .2s;
+}
+
+.signin-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(255,106,0,0.35);
+}
+
+/* ===== Footer ===== */
+
+.signin-footer {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 14px;
+  color: #a1a1aa;
+}
+
+.signin-link {
+  color: var(--nike-orange);
+  font-weight: 500;
+}
+.signin-error {
+  margin: 8px 0 0;
+  color: #ff6b6b;
+  font-size: 14px;
+}
+
+.signin-success {
+  margin: 8px 0 0;
+  color: #4ade80;
+  font-size: 14px;
+}
+
+.signin-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
