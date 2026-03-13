@@ -50,7 +50,15 @@ export const httpRequest = async (path, options = {}) => {
     }
   }
 
-  const response = await fetch(buildUrl(path), {
+  const url = buildUrl(path);
+
+  // ngrok free endpoints show an interstitial warning unless this header is present.
+  // See: https://ngrok.com/docs#getting-started-browser-warning
+  if (url.includes('ngrok')) {
+    headers.set('ngrok-skip-browser-warning', 'true');
+  }
+
+  const response = await fetch(url, {
     ...options,
     headers,
   });

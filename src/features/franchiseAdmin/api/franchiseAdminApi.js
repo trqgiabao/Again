@@ -280,13 +280,13 @@ const realRejectAdminApplication = async (id, body = {}) => {
 };
 
 const realGetConsultantDashboard = async () => {
-  const payload = await httpRequest(`/api/consultant/dashboard`);
+  const payload = await httpRequest(`/api/admin/dashboard`);
   return normalizeDashboard(payload);
 };
 
 const realGetConsultantPool = async (params = {}) => {
   const queryString = buildQueryString(params);
-  const payload = await httpRequest(`/api/consultant/applications/pool${queryString}`);
+  const payload = await httpRequest(`/api/admin/applications/pool${queryString}`);
   const items = pickArray(payload).map(normalizeApplicationItem);
 
   return {
