@@ -3,11 +3,14 @@ import { HomePage } from "@/features/home";
 import { CreateContractPage } from "@/features/admin";
 import { ContractViewPage } from "@/features/contract";
 import { FranchiseeDashboardPage } from "@/features/franchisee";
-import { StoreManager, StaffManager } from '../../features/manager';
-import { ConsultantApplicationDetailPage, ConsultantDashboardPage, PoolApplicationPage } from '../../features/consultant';
-import PurchaseOrder from '../../features/purchase/pages/PurchaseOrder/PurchaseOrder';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import SignInPage from '@/features/auth/pages/SignInPage.jsx';
+import { StoreManager, StaffManager } from "../../features/manager";
+import {
+  ConsultantApplicationDetailPage,
+  ConsultantDashboardPage,
+  PoolApplicationPage,
+} from "../../features/consultant";
+import { Navigate, Route, Routes } from "react-router-dom";
+import SignInPage from "@/features/auth/pages/SignInPage.jsx";
 import {
   AdminDashboardPage,
   ApplicationDetailPage,
@@ -16,32 +19,48 @@ import {
   AdminInspectionDetailPage,
   FranchiseeListPage,
   StoresPage,
-} from '@/features/franchiseAdmin';
+  PurchaseOrderPage,
+} from "@/features/franchiseAdmin";
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-       <Route path="/signin" element={<SignInPage />} />
+      <Route path="/signin" element={<SignInPage />} />
       <Route path="/admin/tao-hop-dong" element={<CreateContractPage />} />
-      <Route path="/franchisee/dashboard" element={<FranchiseeDashboardPage />} />
+      <Route
+        path="/franchisee/dashboard"
+        element={<FranchiseeDashboardPage />}
+      />
       <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
       <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
       <Route path="/admin/stores" element={<StoresPage />} />
-      <Route path="/admin/purchase-orders" element={<PurchaseOrder />} />
+      <Route path="/admin/purchase-orders" element={<PurchaseOrderPage />} />
       <Route path="/admin/applications" element={<ApplicationListPage />} />
-      <Route path="/admin/applications/:id" element={<ApplicationDetailPage />} />
+      <Route
+        path="/admin/applications/:id"
+        element={<ApplicationDetailPage />}
+      />
       <Route path="/admin/inspections" element={<AdminInspectionPage />} />
-      <Route path="/admin/inspections/:id" element={<AdminInspectionDetailPage />} />
+      <Route
+        path="/admin/inspections/:id"
+        element={<AdminInspectionDetailPage />}
+      />
       <Route path="/admin/franchisees" element={<FranchiseeListPage />} />
       <Route path="/contracts" element={<ContractViewPage />} />
       <Route path="/contracts/:contractId" element={<ContractViewPage />} />
       <Route path="*" element={<NotFound />} />
       <Route path="/manager/stores" element={<StoreManager />} />
       <Route path="/manager/staff" element={<StaffManager />} />
-        <Route path="/consultant/dashboard" element={<ConsultantDashboardPage />} />
-        <Route path="/consultant/applications/:id" element={<ConsultantApplicationDetailPage />} />
-        <Route path="/consultant/pool" element={<PoolApplicationPage />} />
+      <Route
+        path="/consultant/dashboard"
+        element={<ConsultantDashboardPage />}
+      />
+      <Route
+        path="/consultant/applications/:id"
+        element={<ConsultantApplicationDetailPage />}
+      />
+      <Route path="/consultant/pool" element={<PoolApplicationPage />} />
     </Routes>
   );
 };

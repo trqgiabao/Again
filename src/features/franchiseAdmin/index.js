@@ -5,3 +5,4 @@ export { default as AdminInspectionPage } from './pages/AdminInspectionPage';
 export { default as AdminInspectionDetailPage } from './pages/AdminInspectionDetailPage';
 export { default as FranchiseeListPage } from './pages/FranchiseeListPage';
 export { default as StoresPage } from './pages/StoresPage';
+export { default as PurchaseOrderPage } from './pages/PurchaseOrderPage';

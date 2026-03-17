@@ -16,13 +16,15 @@ export default function StoresPage() {
       setError("");
 
       try {
-        const data = await httpRequest("/admin/stores");
+        const data = await httpRequest(
+          "https://freckly-hyperarchaeological-thea.ngrok-free.dev/api/admin/stores"
+        );
         setStores(Array.isArray(data) ? data : []);
       } catch (err) {
         setStores([]);
         setError(
           err?.message ||
-            "Unable to load stores. Please verify the backend API or check network connectivity."
+            "Unable to load stores. Please verify the backend API or check network connectivity.",
         );
       } finally {
         setLoading(false);
@@ -49,14 +51,20 @@ export default function StoresPage() {
       {!!error && (
         <div className="page-error">
           <p>{error}</p>
-          <button className="store-card__action" onClick={() => window.location.reload()}>
+          <button
+            className="store-card__action"
+            onClick={() => window.location.reload()}
+          >
             Retry
           </button>
         </div>
       )}
 
       {!loading && !error && stores.length === 0 && (
-        <p>No stores available. Please check the backend API or contact your system administrator.</p>
+        <p>
+          No stores available. Please check the backend API or contact your
+          system administrator.
+        </p>
       )}
 
       {!loading && !error && stores.length > 0 && (
