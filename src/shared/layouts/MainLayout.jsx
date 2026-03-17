@@ -1,16 +1,14 @@
-import Header from '@/components/organisms/Header';
-import Footer from '@/components/organisms/Footer';
-import { Outlet } from 'react-router-dom';
+import React from 'react';
+import Header from '../components/organisms/Header';
+import Footer from '../components/organisms/Footer';
 
-const MainLayout = () => {
+const MainLayout = ({ children, onJoinClick }) => {
   return (
-    <>
-      <Header />
-      <main>
-        <Outlet />
-      </main>
+    <div>
+      <Header onJoinClick={onJoinClick} />
+      <main>{children}</main>
       <Footer />
-    </>
+    </div>
   );
 };
 

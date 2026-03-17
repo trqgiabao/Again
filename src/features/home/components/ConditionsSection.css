@@ -1,0 +1,19 @@
+.conditions {
+  padding: 100px 0;
+  background: var(--color-gray-100);
+}
+
+.conditions__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .conditions {
+    padding: 64px 0;
+  }
+  .conditions__grid {
+    grid-template-columns: 1fr;
+  }
+}

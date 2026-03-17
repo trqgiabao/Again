@@ -1,0 +1,19 @@
+.benefits {
+  padding: 100px 0;
+  background: var(--color-white);
+}
+
+.benefits__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .benefits {
+    padding: 64px 0;
+  }
+  .benefits__grid {
+    grid-template-columns: 1fr;
+  }
+}

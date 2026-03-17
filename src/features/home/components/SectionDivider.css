@@ -1,0 +1,20 @@
+.section-divider {
+  padding: 0;
+  overflow: hidden;
+}
+
+.section-divider__line {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-gray-200), transparent);
+}
+
+.section-divider--accent .section-divider__line {
+  background: linear-gradient(90deg, transparent, var(--color-nike-orange), transparent);
+  opacity: 0.4;
+}
+
+.section-divider--dark .section-divider__line {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}

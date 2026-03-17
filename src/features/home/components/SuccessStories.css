@@ -1,0 +1,255 @@
+.stories {
+  padding: 100px 0;
+  background: var(--color-gray-100);
+}
+
+.stories .section-title__heading {
+  color: var(--color-black);
+}
+
+.stories .section-title__subtitle {
+  color: var(--color-gray-500);
+}
+
+/* Highlights bar */
+.stories__highlights {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin-bottom: 56px;
+  padding: 32px 0;
+  border-top: 1px solid var(--color-gray-200);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.stories__highlight {
+  text-align: center;
+}
+
+.stories__highlight-number {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--color-nike-orange);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.stories__highlight-label {
+  font-size: 13px;
+  color: var(--color-gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Carousel */
+.stories__carousel {
+  position: relative;
+  max-width: 700px;
+  margin: 0 auto;
+  min-height: 340px; 
+}
+
+.stories__card {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateX(60px) scale(0.95);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.stories__card--active {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+
+.stories__card-inner {
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: 20px;
+  padding: 40px;
+  padding-bottom: 40px; 
+  box-shadow: var(--shadow-md);
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.stories__quote-icon {
+  color: var(--color-nike-orange);
+  opacity: 0.3;
+  margin-bottom: 16px;
+}
+
+.stories__quote-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.stories__quote {
+  font-size: 18px;
+  color: var(--color-gray-700);
+  line-height: 1.8;
+  margin-bottom: 28px;
+  font-style: italic;
+}
+
+.stories__meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.stories__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-nike-orange);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.stories__name {
+  font-weight: 600;
+  color: var(--color-black);
+  font-size: 15px;
+}
+
+.stories__location {
+  font-size: 13px;
+  color: var(--color-gray-500);
+}
+
+.stories__years {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 12px;
+  background: var(--color-gray-100);
+  border-radius: 20px;
+}
+
+.stories__metric {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-nike-orange);
+  padding: 5px 14px;
+  border: 1px solid rgba(250, 84, 0, 0.3);
+  border-radius: 20px;
+  background: rgba(250, 84, 0, 0.06);
+  word-break: keep-all;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+/* Controls */
+.stories__controls {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stories__arrow {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-gray-200);
+  background: var(--color-white);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-gray-500);
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.stories__arrow:hover {
+  border-color: var(--color-nike-orange);
+  color: var(--color-nike-orange);
+}
+
+.stories__arrow svg {
+  width: 16px;
+  height: 16px;
+}
+
+.stories__nav {
+  display: flex;
+  gap: 10px;
+}
+
+.stories__nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--color-gray-300);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.stories__nav-dot--active {
+  background: var(--color-nike-orange);
+  border-color: var(--color-nike-orange);
+}
+
+@media (max-width: 768px) {
+  .stories {
+    padding: 64px 0;
+  }
+  .stories__highlights {
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+  }
+  .stories__card {
+    position: relative;
+    display: none;
+    bottom: auto;
+  }
+  .stories__card--active {
+    display: block;
+  }
+  .stories__carousel {
+    min-height: auto;
+  }
+  .stories__card-inner {
+    padding: 28px;
+  }
+  .stories__quote {
+    font-size: 16px;
+  }
+  .stories__controls {
+    position: relative;
+    margin-top: 24px;
+    transform: none;
+    left: auto;
+    justify-content: center;
+  }
+}

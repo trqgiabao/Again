@@ -1,0 +1,255 @@
+.admin-page {
+    padding: 4rem 5%;
+    background: #ffffff;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.page-title {
+    font-size: 4rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #111;
+}
+
+.filter-bar {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.filter-select,
+.search-input {
+    padding: 0.8rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    min-width: 180px;
+    font-size: 1rem;
+}
+
+.action-bar {
+    text-align: right;
+    margin-bottom: 2rem;
+}
+
+.add-btn {
+    background: #f35000;
+    color: white;
+    border: none;
+    padding: 0.9rem 1.8rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.add-btn:hover {
+    background: #d94500;
+}
+
+.table-container {
+    width: 90%;
+    margin: 0 auto 3rem auto;
+    overflow-x: auto;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 1.2rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+}
+
+tr:hover {
+    background: #f8fafc;
+}
+
+.status {
+    font-weight: 600;
+}
+
+.status.approved {
+    color: #10b981;
+}
+
+.status.rejected {
+    color: #ef4444;
+}
+
+.status.submitted {
+    color: #f59e0b;
+}
+
+.status.delivered {
+    color: #3b82f6;
+}
+
+.btn-detail {
+    background: none;
+    border: none;
+    color: #f35000;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 1000px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal h2 {
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+}
+
+.sub-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 2rem 0 1.2rem;
+    color: #f35000;
+}
+
+.catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.catalog-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1.5rem;
+    background: #fafafa;
+}
+
+.catalog-card h4 {
+    margin: 0 0 0.8rem;
+    font-size: 1.2rem;
+}
+
+.catalog-card p {
+    margin: 0.4rem 0;
+    color: #4b5563;
+}
+
+.add-controls {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+
+.qty-input {
+    width: 70px;
+    padding: 0.6rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.add-btn-small {
+    background: #f35000;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.add-btn-small:hover {
+    background: #d94500;
+}
+
+.selected-items {
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.selected-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #eee;
+    font-size: 1.1rem;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-top: 1.2rem;
+    padding-top: 1.2rem;
+    border-top: 2px solid #e5e7eb;
+}
+
+.no-items {
+    text-align: center;
+    color: #6b7280;
+    padding: 3rem 0;
+    font-size: 1.2rem;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2.5rem;
+}
+
+.btn-submit,
+.btn-cancel {
+    flex: 1;
+    padding: 0.9rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+.btn-submit {
+    background: #f35000;
+    color: white;
+    border: none;
+}
+
+.btn-cancel {
+    background: #e5e7eb;
+    color: #374151;
+    border: none;
+}

@@ -1,10 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminMenu from "../components/adminMenu/AdminMenu";
 import StatusBadge from "../components/statusBadge/StatusBadge";
-import { getAdminApplications } from "../api/franchiseAdminApi";
+import { getAdminApplications, getApplicationStatuses } from "../api/adminApplications";
+import Pagination from "@/shared/components/molecules/pagination/Pagination";
 import "./ApplicationListPage.css";
 import "./AdminShared.css";
+
+const PAGE_SIZE = 20;
 
 const ApplicationListPage = () => {
   const navigate = useNavigate();
@@ -14,8 +17,21 @@ const ApplicationListPage = () => {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [applications, setApplications] = useState([]);
+  const [statuses, setStatuses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState("");
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState({ totalPages: 1, totalCount: 0, hasNext: false, hasPrevious: false });
+
+  useEffect(() => {
+    getApplicationStatuses()
+      .then(setStatuses)
+      .catch(() => setStatuses([]));
+  }, []);
+
+  useEffect(() => {
+    setPage(1);
+  }, [status, region, search, fromDate, toDate]);
 
   useEffect(() => {
     const loadApplications = async () => {
@@ -25,13 +41,19 @@ const ApplicationListPage = () => {
 
         const response = await getAdminApplications({
           status,
-          region,
+          preferredRegion: region,
           search,
-          page: 1,
-          pageSize: 20,
+          page,
+          pageSize: PAGE_SIZE,
         });
 
         setApplications(response.items || []);
+        setPagination({
+          totalPages: response.totalPages || 1,
+          totalCount: response.totalCount || 0,
+          hasNext: response.hasNext || false,
+          hasPrevious: response.hasPrevious || false,
+        });
       } catch (error) {
         setApiError(`Unable to load applications. Details: ${error.message}`);
         setApplications([]);
@@ -41,24 +63,17 @@ const ApplicationListPage = () => {
     };
 
     loadApplications();
-  }, [status, region, search]);
+  }, [status, region, search, fromDate, toDate, page]);
 
-  const data = useMemo(() => {
-    return applications.filter((item) => {
-      const submittedAt = String(item.submittedAt || "").slice(0, 10);
-      const matchFrom = !fromDate || submittedAt >= fromDate;
-      const matchTo = !toDate || submittedAt <= toDate;
-      return matchFrom && matchTo;
-    });
-  }, [applications, fromDate, toDate]);
+  const data = applications;
 
   return (
     <section className="admin-page">
       <header className="admin-page__header">
         <h1>Franchise Application List</h1>
         <p>Manage applications by status, region, and submission date.</p>
-        {loading && <p>Loading application data...</p>}
-        {!!apiError && <p>{apiError}</p>}
+        {loading && <p className="application-list__feedback">Loading application data...</p>}
+        {!!apiError && <p className="application-list__feedback application-list__feedback--error">{apiError}</p>}
       </header>
 
       <AdminMenu />
@@ -66,9 +81,9 @@ const ApplicationListPage = () => {
       <div className="filters">
         <select value={status} onChange={(event) => setStatus(event.target.value)}>
           <option value="All">Status: All</option>
-          <option value="Pending">Pending</option>
-          <option value="Approved">Approved</option>
-          <option value="Rejected">Rejected</option>
+          {statuses.map((s) => (
+            <option key={s.value} value={s.name}>{s.name}</option>
+          ))}
         </select>
 
         <select value={region} onChange={(event) => setRegion(event.target.value)}>
@@ -121,8 +136,8 @@ const ApplicationListPage = () => {
               >
                 <td>{item.fullName}</td>
                 <td>{item.email}</td>
-                <td>{item.region}</td>
-                <td>{String(item.submittedAt || "").slice(0, 10)}</td>
+                <td>{item.preferredRegion}</td>
+                <td>{String(item.createdAt || "").slice(0, 10)}</td>
                 <td>
                   <StatusBadge status={item.status} />
                 </td>
@@ -139,6 +154,16 @@ const ApplicationListPage = () => {
           </tbody>
         </table>
       </div>
+
+      <Pagination
+        page={page}
+        totalPages={pagination.totalPages}
+        totalCount={pagination.totalCount}
+        hasPrevious={pagination.hasPrevious}
+        hasNext={pagination.hasNext}
+        loading={loading}
+        onPageChange={setPage}
+      />
     </section>
   );
 };

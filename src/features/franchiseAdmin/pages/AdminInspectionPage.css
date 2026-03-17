@@ -1,0 +1,13 @@
+.admin-inspection__feedback {
+  margin-top: 12px;
+  font-size: 0.92rem;
+}
+
+.admin-inspection__feedback--error {
+  color: #ff8f8f;
+}
+
+.admin-inspection__table th:nth-child(4),
+.admin-inspection__table td:nth-child(4) {
+  text-align: right;
+}

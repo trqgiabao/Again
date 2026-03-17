@@ -1,13 +1,5 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './app/pages/App'
-import { BrowserRouter } from 'react-router-dom';
+import { createRoot } from "react-dom/client";
+import App from "./app/pages/App";
+import "./app/style/global.css";
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </StrictMode>
-)
+createRoot(document.getElementById("root")).render(<App />);

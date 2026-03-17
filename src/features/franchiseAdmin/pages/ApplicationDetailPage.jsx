@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 import AdminMenu from "../components/adminMenu/AdminMenu";
 import Modal from "../components/modal/Modal";
 import StatusBadge from "../components/statusBadge/StatusBadge";
 import {
-  approveAdminApplication,
   getAdminApplicationDetail,
+  approveAdminApplication,
   rejectAdminApplication,
-} from "../api/franchiseAdminApi";
+  createAdminFranchiseContract,
+} from "../api/adminApplications";
 import "./ApplicationDetailPage.css";
 import "./AdminShared.css";
 
@@ -17,6 +19,23 @@ const formatCurrency = (value) => {
   }).format(Number(value) || 0)} đ`;
 };
 
+const getDateInputValue = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+const getDefaultContractStartDate = () => {
+  const now = new Date();
+  return getDateInputValue(new Date(now.getFullYear(), now.getMonth() + 1, 1));
+};
+
+const getInitialContractForm = (application = {}) => ({
+  startDate: getDefaultContractStartDate(),
+  region: application?.preferredRegion || "",
+});
+
 const ApplicationDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -24,12 +43,15 @@ const ApplicationDetailPage = () => {
   const [applicationData, setApplicationData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState("");
-  const [actionError, setActionError] = useState("");
   const [actionLoading, setActionLoading] = useState(false);
 
   const [openApprove, setOpenApprove] = useState(false);
   const [openReject, setOpenReject] = useState(false);
+  const [openCreateContract, setOpenCreateContract] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
+  const [contractLoading, setContractLoading] = useState(false);
+  const [contractError, setContractError] = useState("");
+  const [contractForm, setContractForm] = useState(getInitialContractForm());
 
   useEffect(() => {
     const loadDetail = async () => {
@@ -49,13 +71,58 @@ const ApplicationDetailPage = () => {
   }, [id]);
 
   const timeline = useMemo(() => {
-    return Array.isArray(applicationData?.history) ? applicationData.history : [];
+    if (Array.isArray(applicationData?.history) && applicationData.history.length > 0) {
+      return applicationData.history;
+    }
+    const items = [];
+    if (applicationData?.createdAt) {
+      items.push({
+        time: String(applicationData.createdAt).replace("T", " "),
+        status: "Submitted",
+        note: "Application submitted.",
+      });
+    }
+    if (applicationData?.reviewedAt) {
+      items.push({
+        time: String(applicationData.reviewedAt).replace("T", " "),
+        status: applicationData.status,
+        note: applicationData.rejectReason || "Reviewed by admin.",
+      });
+    }
+    return items;
   }, [applicationData]);
+
+  const franchiseeId =
+    applicationData?.franchiseeId ||
+    applicationData?.franchisee?.id ||
+    applicationData?.approvedFranchiseeId ||
+    "";
+
+  const canCreateContract = Boolean(franchiseeId);
+
+  const handleCloseCreateContract = () => {
+    setOpenCreateContract(false);
+    setContractError("");
+    setContractForm(getInitialContractForm(applicationData));
+  };
+
+  const handleOpenCreateContract = () => {
+    setContractError("");
+    setContractForm(getInitialContractForm(applicationData));
+    setOpenCreateContract(true);
+  };
+
+  const handleContractFieldChange = (field) => (event) => {
+    const { value } = event.target;
+    setContractForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   const handleApprove = async () => {
     try {
       setActionLoading(true);
-      setActionError("");
 
       await approveAdminApplication(id, {
         note: "Approved by admin",
@@ -79,8 +146,9 @@ const ApplicationDetailPage = () => {
       });
 
       setOpenApprove(false);
+      toast.success("Application approved successfully.");
     } catch (error) {
-      setActionError(`Approval failed. Details: ${error.message}`);
+      toast.error(`Approval failed. Details: ${error.message}`);
     } finally {
       setActionLoading(false);
     }
@@ -89,7 +157,6 @@ const ApplicationDetailPage = () => {
   const handleReject = async () => {
     try {
       setActionLoading(true);
-      setActionError("");
 
       await rejectAdminApplication(id, {
         rejectReason: rejectReason.trim(),
@@ -97,27 +164,63 @@ const ApplicationDetailPage = () => {
 
       setApplicationData((prev) => {
         if (!prev) return prev;
-
         return {
           ...prev,
           status: "Rejected",
-          history: [
-            ...(prev.history || []),
-            {
-              time: new Date().toLocaleString("en-GB"),
-              status: "Rejected",
-              note: rejectReason.trim(),
-            },
-          ],
+          rejectReason: rejectReason.trim(),
+          reviewedAt: new Date().toISOString(),
         };
       });
 
       setOpenReject(false);
       setRejectReason("");
+      toast.success("Application rejected successfully.");
     } catch (error) {
-      setActionError(`Rejection failed. Details: ${error.message}`);
+      toast.error(`Rejection failed. Details: ${error.message}`);
     } finally {
       setActionLoading(false);
+    }
+  };
+
+  const handleCreateContract = async () => {
+    if (!franchiseeId) {
+      setContractError("This application does not have a franchiseeId yet.");
+      return;
+    }
+
+    if (!contractForm.startDate) {
+      setContractError("Start date is required.");
+      return;
+    }
+
+    if (!contractForm.region.trim()) {
+      setContractError("Region is required.");
+      return;
+    }
+
+    try {
+      setContractLoading(true);
+      setContractError("");
+
+      const createdContract = await createAdminFranchiseContract({
+        franchiseeId,
+        applicationId: id,
+        startDate: contractForm.startDate,
+        region: contractForm.region.trim(),
+      });
+
+      const refreshedDetail = await getAdminApplicationDetail(id);
+      setApplicationData(refreshedDetail);
+      handleCloseCreateContract();
+      toast.success(
+        createdContract?.code
+          ? `Contract ${createdContract.code} created successfully.`
+          : "Contract created successfully."
+      );
+    } catch (error) {
+      setContractError(error.message || "Failed to create contract.");
+    } finally {
+      setContractLoading(false);
     }
   };
 
@@ -166,6 +269,15 @@ const ApplicationDetailPage = () => {
 
           <button
             type="button"
+            className="application-detail-page__action-btn application-detail-page__action-btn--contract"
+            onClick={handleOpenCreateContract}
+            disabled={contractLoading || !canCreateContract}
+          >
+            Create Contract
+          </button>
+
+          <button
+            type="button"
             className="application-detail-page__action-btn application-detail-page__action-btn--approve"
             onClick={() => setOpenApprove(true)}
             disabled={actionLoading || applicationData.status === "Approved"}
@@ -185,7 +297,6 @@ const ApplicationDetailPage = () => {
       </div>
 
       {!!apiError && <p className="application-detail-page__message">{apiError}</p>}
-      {!!actionError && <p className="application-detail-page__message">{actionError}</p>}
 
       <div className="application-detail-page__grid">
         <article className="admin-surface application-detail-page__card">
@@ -232,6 +343,12 @@ const ApplicationDetailPage = () => {
               <label>Submitted At</label>
               <p>{String(applicationData.createdAt || "").replace("T", " ")}</p>
             </div>
+            {applicationData.rejectReason && (
+              <div className="application-detail-page__full">
+                <label>Reject Reason</label>
+                <p>{applicationData.rejectReason}</p>
+              </div>
+            )}
           </div>
         </article>
 
@@ -261,6 +378,104 @@ const ApplicationDetailPage = () => {
           )}
         </article>
       </div>
+
+      {(applicationData.proposedRoyaltyRate != null || applicationData.packageSelectionNote) && (
+        <article className="admin-surface application-detail-page__card application-detail-page__card--full application-detail-page__package-card">
+          <h2>Package Selection</h2>
+          <div className="application-detail-page__info-grid">
+            {applicationData.proposedRoyaltyRate != null && (
+              <div>
+                <label>Proposed Royalty Rate</label>
+                <p>{Number(applicationData.proposedRoyaltyRate).toFixed(2)}%</p>
+              </div>
+            )}
+            {applicationData.proposedDurationMonths != null && (
+              <div>
+                <label>Proposed Duration</label>
+                <p>{applicationData.proposedDurationMonths} months</p>
+              </div>
+            )}
+            {applicationData.packageSelectionSelectedAt && (
+              <div>
+                <label>Submitted At</label>
+                <p>{String(applicationData.packageSelectionSelectedAt).replace("T", " ").split(".")[0]}</p>
+              </div>
+            )}
+            {applicationData.packageSelectionNote && (
+              <div className="application-detail-page__full">
+                <label>Consultant Note</label>
+                <p>{applicationData.packageSelectionNote}</p>
+              </div>
+            )}
+          </div>
+        </article>
+      )}
+
+      <Modal
+        isOpen={openCreateContract}
+        title="Create Contract"
+        onClose={handleCloseCreateContract}
+      >
+        <div className="application-detail-page__contract-form">
+          <div className="application-detail-page__contract-summary">
+            <div>
+              <label>Franchisee</label>
+              <p>{applicationData.fullName || "N/A"}</p>
+            </div>
+            <div>
+              <label>Application Code</label>
+              <p>{applicationData.code || "N/A"}</p>
+            </div>
+          </div>
+
+          <div className="application-detail-page__contract-fields">
+            <div>
+              <label htmlFor="contractStartDate">Start Date</label>
+              <input
+                id="contractStartDate"
+                type="date"
+                value={contractForm.startDate}
+                onChange={handleContractFieldChange("startDate")}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="contractRegion">Region</label>
+              <input
+                id="contractRegion"
+                type="text"
+                value={contractForm.region}
+                onChange={handleContractFieldChange("region")}
+                placeholder="Enter contract region"
+              />
+            </div>
+          </div>
+
+          {contractError && (
+            <p className="application-detail-page__contract-error">{contractError}</p>
+          )}
+        </div>
+
+        <div className="application-detail-page__modal-actions">
+          <button
+            type="button"
+            className="application-detail-page__secondary-btn"
+            onClick={handleCloseCreateContract}
+            disabled={contractLoading}
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            className="application-detail-page__primary-btn"
+            onClick={handleCreateContract}
+            disabled={contractLoading || !canCreateContract}
+          >
+            {contractLoading ? "Creating..." : "Create Contract"}
+          </button>
+        </div>
+      </Modal>
 
       <Modal
         isOpen={openApprove}
