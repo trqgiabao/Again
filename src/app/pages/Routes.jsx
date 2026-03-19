@@ -20,6 +20,7 @@ import {
   FranchiseeListPage,
   StoresPage,
   PurchaseOrderPage,
+  AdminQuarterlyRevenuePage,
 } from "@/features/franchiseAdmin";
 
 const AppRoutes = () => {
@@ -34,6 +35,10 @@ const AppRoutes = () => {
       />
       <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
       <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+      <Route
+        path="/admin/quarterly-revenue"
+        element={<AdminQuarterlyRevenuePage />}
+      />
       <Route path="/admin/stores" element={<StoresPage />} />
       <Route path="/admin/purchase-orders" element={<PurchaseOrderPage />} />
       <Route path="/admin/applications" element={<ApplicationListPage />} />

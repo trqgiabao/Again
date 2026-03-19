@@ -1,0 +1,106 @@
+@import './AdminShared.css';
+
+.admin-quarterly-page__actions {
+  margin: 0 0 1rem;
+}
+
+.admin-quarterly-page__back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(17, 19, 26, 0.92);
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.admin-quarterly-page__back-button:hover {
+  border-color: rgba(255, 159, 67, 0.35);
+}
+
+.admin-quarterly-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.admin-quarterly-summary__card {
+  padding: 20px;
+}
+
+.admin-quarterly-summary__card h2 {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.admin-quarterly-summary__card p {
+  margin: 0.5rem 0 0;
+  color: var(--brand-2);
+  font-size: 1.75rem;
+  font-weight: 800;
+}
+
+.admin-quarterly-table-wrap {
+  padding: 24px;
+}
+
+.admin-quarterly-table-wrap h2 {
+  margin: 0 0 1rem;
+}
+
+.admin-quarterly-table-scroll {
+  overflow-x: auto;
+}
+
+.admin-quarterly-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+  background: rgba(10, 14, 26, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.admin-quarterly-table th,
+.admin-quarterly-table td {
+  padding: 0.85rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+}
+
+.admin-quarterly-table th {
+  color: #a8b3c8;
+  font-size: 0.84rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.admin-quarterly-table td {
+  color: var(--text-primary);
+  background: transparent;
+}
+
+.admin-quarterly-table tbody tr {
+  background: rgba(7, 12, 24, 0.5);
+}
+
+.admin-quarterly-table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.admin-quarterly-table tbody tr:hover {
+  background: rgba(255, 159, 67, 0.1);
+}
+
+@media (max-width: 768px) {
+  .admin-quarterly-summary {
+    grid-template-columns: 1fr;
+  }
+}

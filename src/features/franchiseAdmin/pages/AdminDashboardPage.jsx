@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import AdminMenu from "../components/adminMenu/AdminMenu";
 import StatCard from "../components/statCard/StatCard";
 import { getConsultantDashboard } from "../api/franchiseAdminApi";
@@ -47,6 +48,9 @@ const AdminDashboardPage = () => {
       <header className="admin-page__header">
         <h1>Admin Dashboard</h1>
         <p>Real-time overview of the franchise system.</p>
+         <Link to="/admin/quarterly-revenue" className="admin-dashboard__report-link">
+          Quarterly Revenue Report
+        </Link>
         {loading && <p>Loading dashboard data...</p>}
         {!!apiError && <p>{apiError}</p>}
       </header>

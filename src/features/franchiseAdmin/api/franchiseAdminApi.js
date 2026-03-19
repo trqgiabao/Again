@@ -93,6 +93,38 @@ const normalizeDashboard = (payload = {}) => {
   };
 };
 
+const normalizeQuarterlyRevenueShare = (payload = {}) => {
+  const data = payload?.data || payload;
+  const items = pickArray(data);
+
+  return items.map((item, index) => {
+    const quarterLabel =
+      item.quarter ||
+      item.quarterLabel ||
+      (item.year && item.quarterNumber
+        ? `Q${item.quarterNumber} ${item.year}`
+        : `Q${(index % 4) + 1} ${new Date().getFullYear()}`);
+
+    const totalRevenue = Number(item.totalRevenue || item.revenue || 0);
+    const negotiatedRate = Number(
+      item.negotiatedRate || item.royaltyRate || item.adminRate || 0
+    );
+    const adminRevenue =
+      Number(item.adminRevenue || item.adminShare || 0) ||
+      (totalRevenue * negotiatedRate) / 100;
+
+    return {
+      id: item.id || `${item.storeId || item.storeName || "store"}-${quarterLabel}`,
+      storeId: item.storeId || "",
+      storeName: item.storeName || item.name || "N/A",
+      quarter: quarterLabel,
+      totalRevenue,
+      negotiatedRate,
+      adminRevenue,
+    };
+  });
+};
+
 const createNowString = () =>
   new Date().toISOString().slice(0, 19).replace("T", " ");
 
@@ -231,6 +263,57 @@ const mockDashboard = {
   ],
 };
 
+const mockQuarterlyRevenueShare = [
+  {
+    id: "share-q1-hcm",
+    storeId: "store-hcm-01",
+    storeName: "HCM Flagship",
+    quarter: "Q1 2026",
+    totalRevenue: 4200000000,
+    negotiatedRate: 8,
+  },
+  {
+    id: "share-q1-hn",
+    storeId: "store-hn-01",
+    storeName: "Ha Noi Center",
+    quarter: "Q1 2026",
+    totalRevenue: 3750000000,
+    negotiatedRate: 7.5,
+  },
+  {
+    id: "share-q1-dn",
+    storeId: "store-dn-01",
+    storeName: "Da Nang Beach",
+    quarter: "Q1 2026",
+    totalRevenue: 3140000000,
+    negotiatedRate: 7.2,
+  },
+  {
+    id: "share-q2-hcm",
+    storeId: "store-hcm-01",
+    storeName: "HCM Flagship",
+    quarter: "Q2 2026",
+    totalRevenue: 4550000000,
+    negotiatedRate: 8,
+  },
+  {
+    id: "share-q2-hn",
+    storeId: "store-hn-01",
+    storeName: "Ha Noi Center",
+    quarter: "Q2 2026",
+    totalRevenue: 3980000000,
+    negotiatedRate: 7.5,
+  },
+  {
+    id: "share-q2-dn",
+    storeId: "store-dn-01",
+    storeName: "Da Nang Beach",
+    quarter: "Q2 2026",
+    totalRevenue: 3290000000,
+    negotiatedRate: 7.2,
+  },
+];
+
 const toDateOnly = (value) => String(value || "").slice(0, 10);
 
 const includesText = (source, keyword) =>
@@ -363,6 +446,12 @@ const realCreateFranchiseContract = async (body = {}) => {
     method: "POST",
     body: JSON.stringify(body),
   });
+};
+
+const realGetAdminQuarterlyRevenueShare = async (params = {}) => {
+  const queryString = buildQueryString(params);
+  const payload = await httpRequest(`/api/admin/revenue-share/quarterly${queryString}`);
+  return normalizeQuarterlyRevenueShare(payload);
 };
 
 /* ===============================
@@ -595,6 +684,11 @@ const mockCreateFranchiseContract = async (body = {}) => {
   };
 };
 
+const mockGetAdminQuarterlyRevenueShare = async () => {
+  await wait();
+  return normalizeQuarterlyRevenueShare(mockQuarterlyRevenueShare);
+};
+
 /* ===============================
    PUBLIC EXPORTS
 ================================ */
@@ -647,6 +741,10 @@ export const selectPackage = (applicationId, body = {}) =>
 export const createFranchiseContract = (body = {}) =>
   USE_MOCK ? mockCreateFranchiseContract(body) : realCreateFranchiseContract(body);
 
+export const getAdminQuarterlyRevenueShare = (params = {}) =>
+  USE_MOCK
+    ? mockGetAdminQuarterlyRevenueShare(params)
+    : realGetAdminQuarterlyRevenueShare(params);
 export const getAdminDashboard = getConsultantDashboard;
 
 export const __resetFranchiseAdminMocks = () => {

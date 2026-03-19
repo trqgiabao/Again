@@ -1,5 +1,18 @@
 @import './AdminShared.css';
 
+.admin-dashboard__report-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  margin-top: 0.5rem;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 159, 67, 0.35);
+  background: rgba(255, 140, 26, 0.1);
+  color: #ffd7b3;
+  font-weight: 700;
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
