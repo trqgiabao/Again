@@ -270,7 +270,7 @@ const mockQuarterlyRevenueShare = [
     storeName: "HCM Flagship",
     quarter: "Q1 2026",
     totalRevenue: 4200000000,
-    negotiatedRate: 8,
+    negotiatedRate: 20,
   },
   {
     id: "share-q1-hn",
@@ -278,7 +278,7 @@ const mockQuarterlyRevenueShare = [
     storeName: "Ha Noi Center",
     quarter: "Q1 2026",
     totalRevenue: 3750000000,
-    negotiatedRate: 7.5,
+    negotiatedRate: 20,
   },
   {
     id: "share-q1-dn",
@@ -286,7 +286,7 @@ const mockQuarterlyRevenueShare = [
     storeName: "Da Nang Beach",
     quarter: "Q1 2026",
     totalRevenue: 3140000000,
-    negotiatedRate: 7.2,
+    negotiatedRate: 20,
   },
   {
     id: "share-q2-hcm",
@@ -294,7 +294,7 @@ const mockQuarterlyRevenueShare = [
     storeName: "HCM Flagship",
     quarter: "Q2 2026",
     totalRevenue: 4550000000,
-    negotiatedRate: 8,
+    negotiatedRate: 20,
   },
   {
     id: "share-q2-hn",
@@ -302,7 +302,7 @@ const mockQuarterlyRevenueShare = [
     storeName: "Ha Noi Center",
     quarter: "Q2 2026",
     totalRevenue: 3980000000,
-    negotiatedRate: 7.5,
+    negotiatedRate: 20,
   },
   {
     id: "share-q2-dn",
@@ -310,7 +310,7 @@ const mockQuarterlyRevenueShare = [
     storeName: "Da Nang Beach",
     quarter: "Q2 2026",
     totalRevenue: 3290000000,
-    negotiatedRate: 7.2,
+    negotiatedRate: 20,
   },
 ];
 

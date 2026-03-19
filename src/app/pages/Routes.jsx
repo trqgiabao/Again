@@ -3,7 +3,7 @@ import { HomePage } from "@/features/home";
 import { CreateContractPage } from "@/features/admin";
 import { ContractViewPage } from "@/features/contract";
 import { FranchiseeDashboardPage } from "@/features/franchisee";
-import { StoreManager, StaffManager, DeliveryTrackingPage, WarehouseManager } from "../../features/manager";
+import { StoreManager, StaffManager, WarehouseManager } from "../../features/manager";
 import {
   ConsultantApplicationDetailPage,
   ConsultantDashboardPage,
@@ -57,7 +57,6 @@ const AppRoutes = () => {
       <Route path="*" element={<NotFound />} />
       <Route path="/manager/stores" element={<StoreManager />} />
       <Route path="/manager/staff" element={<StaffManager />} />
-      <Route path="/manager/shipments" element={<DeliveryTrackingPage />} />
       <Route path="/manager/warehouse" element={<WarehouseManager />} />
       <Route
         path="/consultant/dashboard"

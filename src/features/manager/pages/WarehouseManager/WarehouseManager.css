@@ -1,58 +1,123 @@
 .warehouse-page {
-  padding: 24px;
+  --wm-bg: radial-gradient(circle at 15% 0%, rgba(250, 84, 0, 0.18), transparent 38%),
+    radial-gradient(circle at 100% 25%, rgba(47, 120, 255, 0.14), transparent 36%),
+    linear-gradient(145deg, #07090f 0%, #0f1422 55%, #111827 100%);
+  --wm-panel: linear-gradient(135deg, rgba(15, 20, 34, 0.9), rgba(21, 28, 44, 0.85));
+  --wm-border: rgba(255, 255, 255, 0.12);
+  --wm-text: #f8fafc;
+  --wm-text-muted: #9aa6be;
+  --wm-orange: #fa5400;
+  --wm-orange-hover: #ff6a1a;
+
+  min-height: 100vh;
+  padding: clamp(20px, 3vw, 36px);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
+  color: var(--wm-text);
+  background: var(--wm-bg);
 }
 
 .warehouse-page h1 {
   margin: 0;
-  color: #0f172a;
+  font-size: clamp(28px, 2.8vw, 46px);
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
 }
 
 .panel {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 16px;
+  background: var(--wm-panel);
+  border: 1px solid var(--wm-border);
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(3px);
 }
 
 .panel h2 {
-  margin-top: 0;
+  margin: 0;
+  color: #f8fafc;
+  font-size: clamp(22px, 2vw, 30px);
 }
 
 .panel table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 12px;
+  margin-top: 14px;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.panel thead {
+  background: rgba(255, 255, 255, 0.94);
 }
 
 .panel th,
 .panel td {
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.34);
   text-align: left;
-  padding: 10px;
-  font-size: 14px;
+  padding: 12px;
+  font-size: 15px;
+}
+
+.panel th {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.panel td {
+  color: #f8fafc;
+}
+
+.warehouse-page .panel tbody tr:hover {
+  background: rgba(250, 84, 0, 0.18);
+}
+
+.warehouse-page .panel tbody tr:hover td {
+  color: #ffffff;
 }
 
 .panel input,
 .panel select,
 .panel button {
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  padding: 9px 12px;
   font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.panel input,
+.panel select {
+  background: rgba(255, 255, 255, 0.9);
+  color: #0f172a;
+}
+
+.panel input:focus,
+.panel select:focus {
+  outline: none;
+  border-color: rgba(250, 84, 0, 0.66);
+  box-shadow: 0 0 0 3px rgba(250, 84, 0, 0.18);
 }
 
 .panel button {
-  background: #0ea5e9;
+  background: linear-gradient(135deg, var(--wm-orange), var(--wm-orange-hover));
   color: #fff;
   border: none;
   cursor: pointer;
+  font-weight: 600;
+}
+
+.panel button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(250, 84, 0, 0.35);
 }
 
 .panel button:disabled {
-  opacity: 0.6;
+  opacity: 0.58;
   cursor: not-allowed;
 }
 
@@ -60,21 +125,23 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 12px;
+  margin-top: 14px;
+  flex-wrap: wrap;
 }
 
 .signed-time {
-  color: #166534;
+  color: #22c55e;
   font-size: 13px;
 }
 
 .hint {
-  color: #475569;
+  color: var(--wm-text-muted);
   font-size: 14px;
+  margin-top: 10px;
 }
 
 .qty-input {
-  width: 80px;
+  width: 82px;
 }
 
 .report-header {
@@ -82,23 +149,40 @@
   justify-content: space-between;
   gap: 12px;
   align-items: flex-end;
+  margin-top: 10px;
+}
+
+.report-header label {
+  display: block;
+  color: #cbd5e1;
+  font-size: 13px;
+  margin-bottom: 6px;
 }
 
 .report-grid {
   margin-top: 14px;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  gap: 18px;
+}
+
+.report-grid h3 {
+  color: #fff;
 }
 
 .report-grid ul {
   margin: 8px 0 0;
   padding-left: 18px;
+  list-style: disc;
+}
+
+.report-grid li {
+  color: #e2e8f0;
 }
 
 .success-note {
   margin-top: 12px;
-  color: #047857;
+  color: #4ade80;
   font-weight: 600;
 }
 

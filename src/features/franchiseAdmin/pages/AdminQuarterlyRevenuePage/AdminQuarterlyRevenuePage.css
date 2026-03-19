@@ -45,6 +45,24 @@
   font-weight: 800;
 }
 
+.admin-quarterly-chart-wrap {
+  padding: 24px;
+  margin-bottom: 1rem;
+}
+
+.admin-quarterly-chart-wrap h2 {
+  margin: 0 0 1rem;
+}
+
+.admin-quarterly-chart-container {
+  width: 100%;
+  height: 320px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 14, 26, 0.72);
+}
+
 .admin-quarterly-table-wrap {
   padding: 24px;
 }
