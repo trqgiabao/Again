@@ -17,11 +17,16 @@
   border: 1px solid var(--border-soft);
   background: linear-gradient(135deg, rgba(18, 21, 29, 0.96), rgba(12, 14, 20, 0.92));
   box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
-  transition: transform var(--transition-fast);
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+  cursor: pointer;
 }
 
 .store-card:hover {
   transform: translateY(-2px);
+}
+
+.store-card.is-active {
+  border-color: rgba(255, 159, 67, 0.65);
 }
 
 .store-card__info {
@@ -71,8 +76,50 @@
   transform: translateY(-1px);
   background: rgba(255, 159, 67, 0.25);
 }
+.store-detail {
+  padding: 20px;
+  border-radius: 24px;
+  border: 1px solid var(--border-soft);
+  background: linear-gradient(135deg, rgba(18, 21, 29, 0.96), rgba(12, 14, 20, 0.92));
+}
+
+.store-detail h2 {
+  margin: 0 0 14px;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.store-detail__list {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.store-detail__list div {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.store-detail__list dt {
+  margin: 0;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.store-detail__list dd {
+  margin: 4px 0 0;
+  color: var(--text-primary);
+  font-weight: 600;
+}
 
 @media (max-width: 640px) {
+  .stores-layout {
+    grid-template-columns: 1fr;
+  }
   .stores-grid {
     grid-template-columns: 1fr;
   }

@@ -8,6 +8,7 @@ const menuItems = [
   { label: "Franchisees", to: "/admin/franchisees" },
   { label: "Stores", to: "/admin/stores" },
   { label: "Purchase Orders", to: "/admin/purchase-orders" },
+  {label: "Quarterly Revenue Report", to: "/admin/quarterly-revenue" },
   { label: "Reports", to: "/admin/reports" },
 ];
 
