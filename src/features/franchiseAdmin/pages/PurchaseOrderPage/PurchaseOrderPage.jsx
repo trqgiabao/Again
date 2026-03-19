@@ -104,7 +104,7 @@
 // }
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import AdminMenu from "../components/adminMenu/AdminMenu.jsx";
+import AdminMenu from "../../components/adminMenu/AdminMenu.jsx";
 import "./PurchaseOrderPage.css";
 
 const mockPurchaseOrders = [

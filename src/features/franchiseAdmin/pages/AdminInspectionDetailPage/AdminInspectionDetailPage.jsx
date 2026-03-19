@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import AdminMenu from "../components/adminMenu/AdminMenu";
-import Modal from "../components/modal/Modal";
-import StatusBadge from "../components/statusBadge/StatusBadge";
+import AdminMenu from "../../components/adminMenu/AdminMenu";
+import Modal from "../../components/modal/Modal";
+import StatusBadge from "../../components/statusBadge/StatusBadge";
 import {
   approveAdminSiteInspection,
   getAdminSiteInspectionDetail,
   rejectAdminSiteInspection,
-} from "../api/adminApplications";
+} from "../../api/adminApplications";
 import "./AdminInspectionDetailPage.css";
-import "./AdminShared.css";
+import "../AdminShared.css";
 
 const formatDateTime = (value) => {
   if (!value) return "N/A";

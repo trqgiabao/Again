@@ -1,4 +1,4 @@
-@import './AdminShared.css';
+@import '../AdminShared.css';
 
 .inspection-detail-page__topbar {
   display: flex;

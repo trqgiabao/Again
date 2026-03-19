@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AdminMenu from "../components/adminMenu/AdminMenu";
-import StatusBadge from "../components/statusBadge/StatusBadge";
-import { getAdminApplications, getApplicationStatuses } from "../api/adminApplications";
+import AdminMenu from "../../components/adminMenu/AdminMenu";
+import StatusBadge from "../../components/statusBadge/StatusBadge";
+import { getAdminApplications, getApplicationStatuses } from "../../api/adminApplications";
 import Pagination from "@/shared/components/molecules/pagination/Pagination";
 import "./ApplicationListPage.css";
-import "./AdminShared.css";
+import "../AdminShared.css";
 
 const PAGE_SIZE = 20;
 

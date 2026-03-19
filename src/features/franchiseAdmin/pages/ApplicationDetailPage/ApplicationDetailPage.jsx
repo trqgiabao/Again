@@ -1,17 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import AdminMenu from "../components/adminMenu/AdminMenu";
-import Modal from "../components/modal/Modal";
-import StatusBadge from "../components/statusBadge/StatusBadge";
+import AdminMenu from "../../components/adminMenu/AdminMenu";
+import Modal from "../../components/modal/Modal";
+import StatusBadge from "../../components/statusBadge/StatusBadge";
 import {
   getAdminApplicationDetail,
   approveAdminApplication,
   rejectAdminApplication,
   createAdminFranchiseContract,
-} from "../api/adminApplications";
+} from "../../api/adminApplications";
 import "./ApplicationDetailPage.css";
-import "./AdminShared.css";
+import "../AdminShared.css";
 
 const formatCurrency = (value) => {
   return `${new Intl.NumberFormat("en-US", {

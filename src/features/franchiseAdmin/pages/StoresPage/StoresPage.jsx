@@ -97,7 +97,7 @@
 // }
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AdminMenu from "../components/adminMenu/AdminMenu.jsx";
+import AdminMenu from "../../components/adminMenu/AdminMenu.jsx";
 import "./StoresPage.css";
 
 const mockStores = [

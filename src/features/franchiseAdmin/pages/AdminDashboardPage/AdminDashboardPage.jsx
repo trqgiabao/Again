@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import AdminMenu from "../components/adminMenu/AdminMenu";
-import StatCard from "../components/statCard/StatCard";
-import { getConsultantDashboard } from "../api/franchiseAdminApi";
+import AdminMenu from "../../components/adminMenu/AdminMenu";
+import StatCard from "../../components/statCard/StatCard";
+import { getConsultantDashboard } from "../../api/franchiseAdminApi";
 import "./AdminDashboardPage.css";
 
 const formatCurrency = (value) => {

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import AdminMenu from "../components/adminMenu/AdminMenu";
-import StatusBadge from "../components/statusBadge/StatusBadge";
-import { getAdminFranchisees } from "../api/adminApplications";
+import AdminMenu from "../../components/adminMenu/AdminMenu";
+import StatusBadge from "../../components/statusBadge/StatusBadge";
+import { getAdminFranchisees } from "../../api/adminApplications";
 import Pagination from "@/shared/components/molecules/pagination/Pagination";
 import "./FranchiseeListPage.css";
-import "./AdminShared.css";
+import "../AdminShared.css";
 
 const PAGE_SIZE = 20;
 

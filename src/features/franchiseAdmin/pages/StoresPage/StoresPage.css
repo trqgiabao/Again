@@ -1,4 +1,4 @@
-@import 'AdminShared.css';
+@import '../AdminShared.css';
 
 .stores-grid {
   display: grid;

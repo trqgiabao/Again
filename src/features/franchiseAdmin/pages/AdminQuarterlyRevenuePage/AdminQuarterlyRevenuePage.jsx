@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import AdminMenu from "../components/adminMenu/AdminMenu";
-import { getAdminQuarterlyRevenueShare } from "../api/franchiseAdminApi";
+import AdminMenu from "../../components/adminMenu/AdminMenu";
+import { getAdminQuarterlyRevenueShare } from "../../api/franchiseAdminApi";
 import "./AdminQuarterlyRevenuePage.css";
 
 const formatCurrency = (value) =>
