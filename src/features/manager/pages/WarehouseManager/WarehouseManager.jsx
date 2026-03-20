@@ -4,11 +4,11 @@ import { sendWarehouseReportToFranchise } from '../../api/warehouseApi';
 import './WarehouseManager.css';
 
 const defectReasons = [
-  'Thiếu số lượng',
-  'Hàng bị rách',
-  'Hàng bị nhiễm nước',
-  'Sai màu / sai sản phẩm',
-  'Lỗi khác',
+  'Quantity shortage',
+  'Torn packaging',
+  'Water damage',
+  'Wrong color / wrong product',
+  'Other issue',
 ];
 
 const initialInboundItems = [
@@ -18,8 +18,8 @@ const initialInboundItems = [
 ];
 
 const initialOutboundItems = [
-  { id: 1, sku: 'NK-TS-DRY-L', name: 'Nike Dri-FIT T-shirt L', qty: 24, destination: 'Franchise Quận 1' },
-  { id: 2, sku: 'NK-CL-ESS-BL', name: 'Nike Club Essentials Blue', qty: 16, destination: 'Franchise Bình Thạnh' },
+  { id: 1, sku: 'NK-TS-DRY-L', name: 'Nike Dri-FIT T-shirt L', qty: 24, destination: 'District 1 Franchise' },
+  { id: 2, sku: 'NK-CL-ESS-BL', name: 'Nike Club Essentials Blue', qty: 16, destination: 'Binh Thanh Franchise' },
 ];
 
 const createSignOff = () => ({
@@ -32,7 +32,8 @@ export default function WarehouseManager() {
   const [outboundItems] = useState(initialOutboundItems);
   const [inboundSignOff, setInboundSignOff] = useState(createSignOff());
   const [outboundSignOff, setOutboundSignOff] = useState(createSignOff());
-  const [franchiseName, setFranchiseName] = useState('Franchise Quận 1');
+  const [franchiseName, setFranchiseName] = useState('District 1 Franchise');
+  const [inboundQuery, setInboundQuery] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [lastSentInfo, setLastSentInfo] = useState(null);
 
@@ -46,9 +47,21 @@ export default function WarehouseManager() {
       passed,
       failed,
       total: inboundItems.length,
-      generatedAt: new Date().toLocaleString('vi-VN'),
+      generatedAt: new Date().toLocaleString('en-US'),
     };
   }, [inboundItems]);
+
+  const filteredInboundItems = useMemo(() => {
+    const keyword = inboundQuery.trim().toLowerCase();
+
+    if (!keyword) {
+      return inboundItems;
+    }
+
+    return inboundItems.filter((item) =>
+      item.name.toLowerCase().includes(keyword) || item.sku.toLowerCase().includes(keyword),
+    );
+  }, [inboundItems, inboundQuery]);
 
   const updateItem = (id, updates) => {
     setInboundItems((items) =>
@@ -68,27 +81,27 @@ export default function WarehouseManager() {
   const handleSignOff = (type) => {
     if (type === 'inbound') {
       if (!allItemsReviewed) {
-        toast.warning('Bạn cần kiểm tra và đánh giá toàn bộ sản phẩm trước khi ký nhập hàng.');
+        toast.warning('Please review every inbound item before signing the inbound confirmation.');
         return;
       }
 
       if (!inboundSignOff.managerName.trim()) {
-        toast.warning('Vui lòng nhập tên Warehouse Manager để ký xác nhận nhập hàng.');
+        toast.warning('Please enter the Warehouse Manager name before signing inbound confirmation.');
         return;
       }
 
       setInboundSignOff((prev) => ({ ...prev, signedAt: new Date().toISOString() }));
-      toast.success('Đã ký xác nhận nhập hàng thành công.');
+      toast.success('Inbound confirmation signed successfully.');
       return;
     }
 
     if (!outboundSignOff.managerName.trim()) {
-      toast.warning('Vui lòng nhập tên Warehouse Manager để ký xác nhận xuất hàng.');
+      toast.warning('Please enter the Warehouse Manager name before signing outbound confirmation.');
       return;
     }
 
     setOutboundSignOff((prev) => ({ ...prev, signedAt: new Date().toISOString() }));
-    toast.success('Đã ký xác nhận xuất hàng thành công.');
+    toast.success('Outbound confirmation signed successfully.');
   };
 
   const canSendReport =
@@ -98,7 +111,7 @@ export default function WarehouseManager() {
 
   const handleSendReport = async () => {
     if (!canSendReport) {
-      toast.warning('Hoàn tất ký nhập/xuất và đảm bảo mọi item lỗi đều có lý do trước khi gửi báo cáo.');
+      toast.warning('Complete both confirmations and provide failure reasons for all failed items before sending.');
       return;
     }
 
@@ -112,9 +125,9 @@ export default function WarehouseManager() {
       });
 
       setLastSentInfo(result);
-      toast.success(`Đã gửi báo cáo tới ${franchiseName}. Mã báo cáo: ${result.reportId}`);
+      toast.success(`Report sent to ${franchiseName}. Report ID: ${result.reportId}`);
     } catch (error) {
-      toast.error('Gửi báo cáo thất bại. Vui lòng thử lại.');
+      toast.error('Failed to send report. Please try again.');
     } finally {
       setIsSending(false);
     }
@@ -122,162 +135,233 @@ export default function WarehouseManager() {
 
   return (
     <div className="warehouse-page">
-      <h1>Warehouse Manager - Ký gửi trạng thái nhập/xuất</h1>
+      <header className="page-header card">
+        <p className="eyebrow">Warehouse Operations</p>
+        <h1>Warehouse Manager Dashboard</h1>
+        <p className="page-subtitle">
+          Confirm outbound shipments, inspect inbound quality, and submit structured reports to the franchise team.
+        </p>
+      </header>
 
-      <section className="panel">
-        <h2>1) Ký xác nhận xuất hàng</h2>
+      <section className="panel card">
+        <div className="section-header">
+          <h2>
+            <span aria-hidden="true">📤</span>
+            Outbound Confirmation
+          </h2>
+          <p>Review outgoing items and capture manager sign-off for dispatch confirmation.</p>
+        </div>
+
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>SKU</th>
+                <th>Product</th>
+                <th className="align-right">Quantity</th>
+                <th>Destination</th>
+              </tr>
+            </thead>
+            <tbody>
+              {outboundItems.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.sku}</td>
+                  <td>{item.name}</td>
+                  <td className="align-right">{item.qty}</td>
+                  <td>{item.destination}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
         <div className="signoff-row">
-          <input
-            type="text"
-            placeholder="Tên Warehouse Manager"
-            value={outboundSignOff.managerName}
-            onChange={(e) => setOutboundSignOff((prev) => ({ ...prev, managerName: e.target.value }))}
-          />
-          <button type="button" onClick={() => handleSignOff('outbound')}>
-            Ký xác nhận xuất hàng
+          <div className="field manager-field">
+            <label htmlFor="outbound-manager-name">Warehouse Manager Name</label>
+            <input
+              id="outbound-manager-name"
+              type="text"
+              placeholder="Enter full name"
+              value={outboundSignOff.managerName}
+              onChange={(e) => setOutboundSignOff((prev) => ({ ...prev, managerName: e.target.value }))}
+            />
+          </div>
+          <button className="btn btn-secondary" type="button" onClick={() => handleSignOff('outbound')}>
+            Sign Outbound Confirmation
           </button>
           {outboundSignOff.signedAt && (
-            <span className="signed-time">Đã ký lúc: {new Date(outboundSignOff.signedAt).toLocaleString('vi-VN')}</span>
+            <span className="signed-time">Signed at: {new Date(outboundSignOff.signedAt).toLocaleString('en-US')}</span>
           )}
         </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>SKU</th>
-              <th>Sản phẩm</th>
-              <th>Số lượng xuất</th>
-              <th>Điểm đến</th>
-            </tr>
-          </thead>
-          <tbody>
-            {outboundItems.map((item) => (
-              <tr key={item.id}>
-                <td>{item.sku}</td>
-                <td>{item.name}</td>
-                <td>{item.qty}</td>
-                <td>{item.destination}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </section>
 
-      <section className="panel">
-        <h2>2) Kiểm tra chất lượng & ký xác nhận nhập hàng</h2>
-        <p className="hint">Warehouse Manager cần đánh giá từng item đạt/không đạt và ghi lý do chi tiết cho item không đạt.</p>
+      <section className="panel card">
+        <div className="section-header">
+          <h2>
+            <span aria-hidden="true">📥</span>
+            Inbound Confirmation
+          </h2>
+          <p>Evaluate each inbound item as Passed or Failed. Failed items require a clear failure reason.</p>
+        </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>SKU</th>
-              <th>Sản phẩm</th>
-              <th>SL kỳ vọng</th>
-              <th>SL thực nhận</th>
-              <th>Trạng thái</th>
-              <th>Lý do không đạt</th>
-            </tr>
-          </thead>
-          <tbody>
-            {inboundItems.map((item) => (
-              <tr key={item.id}>
-                <td>{item.sku}</td>
-                <td>{item.name}</td>
-                <td>{item.expectedQty}</td>
-                <td>
-                  <input
-                    className="qty-input"
-                    type="number"
-                    min="0"
-                    value={item.receivedQty}
-                    onChange={(e) => updateItem(item.id, { receivedQty: Number(e.target.value) || 0 })}
-                  />
-                </td>
-                <td>
-                  <select value={item.status} onChange={(e) => handleStatusChange(item.id, e.target.value)}>
-                    <option value="pending">Chưa đánh giá</option>
-                    <option value="passed">Đạt</option>
-                    <option value="failed">Không đạt</option>
-                  </select>
-                </td>
-                <td>
-                  <select
-                    value={item.reason}
-                    disabled={item.status !== 'failed'}
-                    onChange={(e) => updateItem(item.id, { reason: e.target.value })}
-                  >
-                    <option value="">-- Chọn lý do --</option>
-                    {defectReasons.map((reason) => (
-                      <option key={reason} value={reason}>
-                        {reason}
-                      </option>
-                    ))}
-                  </select>
-                </td>
+        <div className="controls-row">
+          <div className="field search-field">
+            <label htmlFor="inbound-search">Search inbound items</label>
+            <input
+              id="inbound-search"
+              type="search"
+              value={inboundQuery}
+              onChange={(e) => setInboundQuery(e.target.value)}
+              placeholder="Filter by SKU or product name"
+            />
+          </div>
+        </div>
+
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>SKU</th>
+                <th>Product</th>
+                <th className="align-right">Expected Qty</th>
+                <th className="align-right">Received Qty</th>
+                <th>Status</th>
+                <th>Failure Reason</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredInboundItems.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.sku}</td>
+                  <td>{item.name}</td>
+                  <td className="align-right">{item.expectedQty}</td>
+                  <td className="align-right">
+                    <input
+                      className="qty-input"
+                      type="number"
+                      min="0"
+                      value={item.receivedQty}
+                      onChange={(e) => updateItem(item.id, { receivedQty: Number(e.target.value) || 0 })}
+                    />
+                  </td>
+                  <td>
+                    <select value={item.status} onChange={(e) => handleStatusChange(item.id, e.target.value)}>
+                      <option value="pending">Pending</option>
+                      <option value="passed">Passed</option>
+                      <option value="failed">Failed</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select
+                      value={item.reason}
+                      disabled={item.status !== 'failed'}
+                      onChange={(e) => updateItem(item.id, { reason: e.target.value })}
+                    >
+                      <option value="">Select reason</option>
+                      {defectReasons.map((reason) => (
+                        <option key={reason} value={reason}>
+                          {reason}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                </tr>
+              ))}
+              {!filteredInboundItems.length && (
+                <tr>
+                  <td colSpan={6}>
+                    <div className="empty-state">
+                      <p>No inbound items match this search.</p>
+                      <span>Try a different SKU or product keyword.</span>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
 
         <div className="signoff-row">
-          <input
-            type="text"
-            placeholder="Tên Warehouse Manager"
-            value={inboundSignOff.managerName}
-            onChange={(e) => setInboundSignOff((prev) => ({ ...prev, managerName: e.target.value }))}
-          />
-          <button type="button" onClick={() => handleSignOff('inbound')}>
-            Ký xác nhận nhập hàng
+          <div className="field manager-field">
+            <label htmlFor="inbound-manager-name">Warehouse Manager Name</label>
+            <input
+              id="inbound-manager-name"
+              type="text"
+              placeholder="Enter full name"
+              value={inboundSignOff.managerName}
+              onChange={(e) => setInboundSignOff((prev) => ({ ...prev, managerName: e.target.value }))}
+            />
+          </div>
+          <button className="btn btn-primary" type="button" onClick={() => handleSignOff('inbound')}>
+            Sign Inbound Confirmation
           </button>
           {inboundSignOff.signedAt && (
-            <span className="signed-time">Đã ký lúc: {new Date(inboundSignOff.signedAt).toLocaleString('vi-VN')}</span>
+            <span className="signed-time">Signed at: {new Date(inboundSignOff.signedAt).toLocaleString('en-US')}</span>
           )}
         </div>
       </section>
 
-      <section className="panel report">
-        <h2>3) Báo cáo kiểm tra gửi Franchise</h2>
+      <section className="panel card report">
+        <div className="section-header">
+          <h2>
+            <span aria-hidden="true">📊</span>
+            Franchise Inspection Report
+          </h2>
+          <p>Send finalized inbound/outbound confirmations and quality results to the receiving franchise.</p>
+        </div>
+
         <div className="report-header">
-          <div>
-            <label>Franchise nhận báo cáo</label>
-            <input value={franchiseName} onChange={(e) => setFranchiseName(e.target.value)} />
+          <div className="field franchise-field">
+            <label htmlFor="franchise-name">Report recipient</label>
+            <input
+              id="franchise-name"
+              value={franchiseName}
+              onChange={(e) => setFranchiseName(e.target.value)}
+              placeholder="Franchise name"
+            />
           </div>
           <div>
-            <button type="button" disabled={isSending} onClick={handleSendReport}>
-              {isSending ? 'Đang gửi...' : 'Gửi báo cáo qua API/Notification'}
+            <button className="btn btn-primary" type="button" disabled={isSending} onClick={handleSendReport}>
+              {isSending ? 'Sending...' : 'Send Report'}
             </button>
           </div>
         </div>
 
         <div className="report-grid">
-          <div>
-            <h3>Sản phẩm đạt yêu cầu ({report.passed.length})</h3>
+          <div className="report-block passed">
+            <h3>Passed Items ({report.passed.length})</h3>
             <ul>
               {report.passed.map((item) => (
                 <li key={item.id}>{item.sku} - {item.name}</li>
               ))}
-              {!report.passed.length && <li>Chưa có sản phẩm đạt.</li>}
+              {!report.passed.length && <li className="empty-list">No passed items yet.</li>}
             </ul>
           </div>
 
-          <div>
-            <h3>Sản phẩm không đạt ({report.failed.length})</h3>
+          <div className="report-block failed">
+            <h3>Failed Items ({report.failed.length})</h3>
             <ul>
               {report.failed.map((item) => (
                 <li key={item.id}>
-                  {item.sku} - {item.name} | Lý do: <strong>{item.reason || 'Chưa chọn lý do'}</strong>
+                  {item.sku} - {item.name} | Reason: <strong>{item.reason || 'Reason pending'}</strong>
                 </li>
               ))}
-              {!report.failed.length && <li>Không có sản phẩm lỗi.</li>}
+              {!report.failed.length && <li className="empty-list">No failed items.</li>}
             </ul>
           </div>
         </div>
 
-        <p className="hint">Generated: {report.generatedAt} | Tổng item kiểm tra: {report.total}</p>
+        <p className="hint">Generated: {report.generatedAt} | Total items reviewed: {report.total}</p>
         {lastSentInfo && (
-          <p className="success-note">
-            Đã gửi thành công tới {lastSentInfo.recipient} ({new Date(lastSentInfo.sentAt).toLocaleString('vi-VN')}) - ID: {lastSentInfo.reportId}
-          </p>
+          <div className="success-note" role="status">
+            <span aria-hidden="true">✅</span>
+            <div>
+              <p>Successfully sent to {lastSentInfo.recipient}.</p>
+              <small>
+                Sent at {new Date(lastSentInfo.sentAt).toLocaleString('en-US')} · Report ID: {lastSentInfo.reportId}
+              </small>
+            </div>
+          </div>
         )}
       </section>
     </div>
